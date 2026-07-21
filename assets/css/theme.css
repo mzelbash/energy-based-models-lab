@@ -418,3 +418,19 @@ hr.soft { border: 0; border-top: 1px solid var(--line); margin: 26px 0; }
   border-radius: 999px; background: var(--brand); color: #fff;
   font-size: 0.72rem; font-weight: 800; vertical-align: middle;
 }
+
+/* ---------- Footer ---------- */
+.app-footer {
+  border-top: 1px solid var(--line);
+  background: var(--bg-elev);
+  margin-top: 40px;
+}
+.app-footer__inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 22px 22px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.app-footer__inner > div:first-child { font-size: 0.9rem; color: var(--ink-soft); }
