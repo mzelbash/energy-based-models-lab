@@ -1,0 +1,13 @@
+# Node dependencies (dev only: build scripts and smoke tests)
+node_modules/
+
+# Copyrighted source material, do not publish
+David-Foster.pdf
+
+# Local verification output
+scratch_out/
+
+# OS and editor cruft
+.DS_Store
+Thumbs.db
+*.log

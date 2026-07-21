@@ -1,0 +1,21 @@
+{
+  "name": "ebm-teaching-app",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Interactive teaching app for Energy-Based Models (Generative Deep Learning ch.7)",
+  "scripts": {
+    "serve": "python -m http.server 8000",
+    "build:data": "python build/fetch_mnist_subset.py",
+    "build:checkpoints": "python build/train_checkpoints.py",
+    "verify:ebm": "python build/verify_ebm.py",
+    "test:smoke": "node build/smoke_test.mjs"
+  },
+  "dependencies": {
+    "@tensorflow/tfjs": "^4.22.0"
+  },
+  "devDependencies": {
+    "pngjs": "^7.0.0",
+    "puppeteer-core": "^23.11.1"
+  }
+}
