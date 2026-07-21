@@ -410,15 +410,104 @@
     <!-- ============================ TAB 7: OTHER EBMs ============================ -->
     <section class="panel" id="tab-other" role="tabpanel" hidden>
       <div class="section-head">
-        <div class="eyebrow">Context</div>
-        <h1 class="page-title">Other energy-based models</h1>
-        <p class="lede">The deep EBM you built is a modern member of an old family. Seeing an earlier one, the restricted
-          Boltzmann machine, makes clear why Langevin sampling was such a step forward.</p>
+        <div class="eyebrow">Context and history</div>
+        <h1 class="page-title">The restricted Boltzmann machine</h1>
+        <p class="lede">The deep EBM you built is a modern member of an old family. The restricted Boltzmann machine
+          (RBM) is one of the earliest energy-based models. It is worth understanding because it makes the energy idea
+          concrete: a few units, some weights, one energy number, and a simple way to sample.</p>
       </div>
 
+      <h2>The building blocks</h2>
+      <div class="grid cols-3">
+        <div class="card">
+          <h3>Visible units, v</h3>
+          <p>The visible units hold the data you observe. For an MNIST image, each visible unit is one pixel, usually
+            binary: <b>0</b> for a dark or inactive pixel, <b>1</b> for a bright or active pixel.</p>
+          <p class="small muted">v<sub>1</sub>, v<sub>2</sub>, ... v<sub>1024</sub> for a 32 by 32 image. They are
+            called visible because their values come straight from the data.</p>
+        </div>
+        <div class="card">
+          <h3>Hidden units, h</h3>
+          <p>The hidden units are not given by the data. They learn patterns in the visible pixels, for example a
+            vertical line, a curve, a loop, or the top of a digit: combinations of pixels that often occur together.</p>
+          <p class="small muted">h<sub>1</sub>, h<sub>2</sub>, ... Traditionally the hidden units are also binary,
+            on or off.</p>
+        </div>
+        <div class="card">
+          <h3>Learned weights, w<sub>ij</sub></h3>
+          <p>Every visible unit connects to every hidden unit through a learned weight that says how compatible the two
+            units are.</p>
+          <ul class="clean small">
+            <li>Large positive weight: the two like to be active together.</li>
+            <li>Large negative weight: they discourage each other.</li>
+            <li>Near zero: little relationship.</li>
+          </ul>
+          <p class="small muted">The model also learns a bias for every visible and hidden unit.</p>
+        </div>
+      </div>
+
+      <h2>What does "restricted" mean?</h2>
+      <p>A full Boltzmann machine allows every kind of connection: visible to visible, hidden to hidden, and visible to
+        hidden. That creates many tangled dependencies and makes sampling slow. A restricted Boltzmann machine keeps
+        only the visible to hidden connections and removes the two within-layer kinds.</p>
       <div class="split">
         <div class="card">
-          <h3>The Boltzmann machine</h3>
+          <h3>Full Boltzmann machine</h3>
+          <svg viewBox="0 0 280 172" style="width:100%;max-width:320px;height:auto;display:block;margin:6px auto" role="img" aria-label="Full Boltzmann machine with connections everywhere">
+            <g style="stroke:var(--line-strong);stroke-width:1.3;fill:none;opacity:.65">
+              <line x1="60" y1="32" x2="140" y2="32"/><line x1="140" y1="32" x2="220" y2="32"/>
+              <path d="M60,32 Q140,4 220,32"/>
+              <line x1="60" y1="140" x2="140" y2="140"/><line x1="140" y1="140" x2="220" y2="140"/>
+              <path d="M60,140 Q140,168 220,140"/>
+              <line x1="60" y1="32" x2="60" y2="140"/><line x1="60" y1="32" x2="140" y2="140"/><line x1="60" y1="32" x2="220" y2="140"/>
+              <line x1="140" y1="32" x2="60" y2="140"/><line x1="140" y1="32" x2="140" y2="140"/><line x1="140" y1="32" x2="220" y2="140"/>
+              <line x1="220" y1="32" x2="60" y2="140"/><line x1="220" y1="32" x2="140" y2="140"/><line x1="220" y1="32" x2="220" y2="140"/>
+            </g>
+            <g style="stroke:var(--panel);stroke-width:2.5">
+              <circle cx="60" cy="32" r="13" style="fill:var(--brand)"/><circle cx="140" cy="32" r="13" style="fill:var(--brand)"/><circle cx="220" cy="32" r="13" style="fill:var(--brand)"/>
+              <circle cx="60" cy="140" r="13" style="fill:var(--accent)"/><circle cx="140" cy="140" r="13" style="fill:var(--accent)"/><circle cx="220" cy="140" r="13" style="fill:var(--accent)"/>
+            </g>
+            <g style="fill:var(--ink-faint);font:700 12px system-ui,sans-serif">
+              <text x="4" y="36">v</text><text x="4" y="144">h</text>
+            </g>
+          </svg>
+          <p class="small muted">Connections everywhere, including within each layer. Powerful, but the tangled
+            dependencies make it very slow to train and sample.</p>
+        </div>
+        <div class="card">
+          <h3>Restricted (RBM)</h3>
+          <svg viewBox="0 0 280 172" style="width:100%;max-width:320px;height:auto;display:block;margin:6px auto" role="img" aria-label="Restricted Boltzmann machine, a bipartite graph">
+            <g style="stroke:var(--brand);stroke-width:1.3;fill:none;opacity:.4">
+              <line x1="40" y1="32" x2="74" y2="140"/><line x1="40" y1="32" x2="140" y2="140"/><line x1="40" y1="32" x2="206" y2="140"/>
+              <line x1="107" y1="32" x2="74" y2="140"/><line x1="107" y1="32" x2="140" y2="140"/><line x1="107" y1="32" x2="206" y2="140"/>
+              <line x1="174" y1="32" x2="74" y2="140"/><line x1="174" y1="32" x2="140" y2="140"/><line x1="174" y1="32" x2="206" y2="140"/>
+              <line x1="241" y1="32" x2="74" y2="140"/><line x1="241" y1="32" x2="140" y2="140"/><line x1="241" y1="32" x2="206" y2="140"/>
+            </g>
+            <g style="stroke:var(--panel);stroke-width:2.5">
+              <circle cx="40" cy="32" r="13" style="fill:var(--brand)"/><circle cx="107" cy="32" r="13" style="fill:var(--brand)"/><circle cx="174" cy="32" r="13" style="fill:var(--brand)"/><circle cx="241" cy="32" r="13" style="fill:var(--brand)"/>
+              <circle cx="74" cy="140" r="13" style="fill:var(--accent)"/><circle cx="140" cy="140" r="13" style="fill:var(--accent)"/><circle cx="206" cy="140" r="13" style="fill:var(--accent)"/>
+            </g>
+            <g style="fill:var(--ink-faint);font:700 12px system-ui,sans-serif">
+              <text x="4" y="36">v</text><text x="4" y="144">h</text>
+            </g>
+          </svg>
+          <p class="small muted">Only visible to hidden connections remain. This two-layer structure with no
+            within-layer links is called a bipartite graph.</p>
+        </div>
+      </div>
+      <div class="callout intuition">
+        <div class="callout__label">Bipartite means two groups</div>
+        <p>Connections are allowed only between the visible group and the hidden group, never inside a group. Visible to
+          hidden is allowed. Visible to visible and hidden to hidden are not. That single restriction is what makes the
+          RBM fast to sample.</p>
+      </div>
+
+      <h2>The energy of a configuration</h2>
+      <p>This is the equation that panel used to show as a bare line of code. Here is what it actually means. Every
+        energy-based model assigns one energy number to a configuration, and low energy means likely.</p>
+      <div class="split">
+        <div class="card">
+          <h3>General Boltzmann machine</h3>
           <div class="eqn">
             <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
               <mrow><mi>E</mi><mo>(</mo><mi>v</mi><mo>,</mo><mi>h</mi><mo>)</mo><mo>=</mo><mo>&#8722;</mo>
@@ -428,15 +517,62 @@
                 <msup><mi>v</mi><mi>T</mi></msup><mi>W</mi><mi>h</mi><mo>)</mo></mrow>
             </math>
           </div>
-          <p class="small muted">Binary visible units <span class="kbd">v</span> and hidden units <span class="kbd">h</span>,
-            with learned weight matrices. A restricted Boltzmann machine removes the within layer connections, leaving a
-            clean two layer bipartite graph that can be sampled by alternating updates.</p>
+          <p class="small">Three interaction terms:</p>
+          <ul class="clean small">
+            <li><span class="kbd">v&#7488;Lv</span>: visible to visible interactions (matrix L).</li>
+            <li><span class="kbd">h&#7488;Jh</span>: hidden to hidden interactions (matrix J).</li>
+            <li><span class="kbd">v&#7488;Wh</span>: visible to hidden coupling (matrix W).</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>The RBM energy</h3>
+          <div class="eqn">
+            <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+              <mrow><mi>E</mi><mo>(</mo><mi>v</mi><mo>,</mo><mi>h</mi><mo>)</mo><mo>=</mo><mo>&#8722;</mo><mo>(</mo>
+                <msup><mi>v</mi><mi>T</mi></msup><mi>W</mi><mi>h</mi><mo>+</mo>
+                <msup><mi>a</mi><mi>T</mi></msup><mi>v</mi><mo>+</mo>
+                <msup><mi>b</mi><mi>T</mi></msup><mi>h</mi><mo>)</mo></mrow>
+            </math>
+          </div>
+          <p class="small muted">Because an RBM has no within-layer connections, the <span class="kbd">L</span> and
+            <span class="kbd">J</span> terms vanish. Only the visible to hidden coupling <span class="kbd">W</span> and
+            the biases <span class="kbd">a</span> and <span class="kbd">b</span> remain. This is the exact energy the
+            live demo below uses.</p>
+        </div>
+      </div>
+
+      <h2>Sampling by alternating updates</h2>
+      <div class="split">
+        <div class="card">
+          <h3>Why alternation works</h3>
+          <p>Because there are no connections between hidden units, once the visible units are known, every hidden unit
+            can be computed independently. And because there are no connections between visible units, once the hidden
+            units are known, every visible unit can be computed independently.</p>
+          <p>So the model updates a whole layer at a time, alternating back and forth:</p>
+          <div class="eqn" style="font:700 1.1rem var(--font-mono);letter-spacing:.05em">v &rarr; h &rarr; v &rarr; h &rarr; v</div>
+          <p class="small muted">Each unit turns on with a probability given by a sigmoid of its inputs:</p>
+          <div class="eqn">
+            <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+              <mrow><mi>p</mi><mo>(</mo><msub><mi>h</mi><mi>j</mi></msub><mo>=</mo><mn>1</mn><mo>&#8739;</mo><mi>v</mi><mo>)</mo><mo>=</mo>
+                <mi>&#963;</mi><mo>(</mo><msub><mi>b</mi><mi>j</mi></msub><mo>+</mo>
+                <munder><mo>&#8721;</mo><mi>i</mi></munder><msub><mi>v</mi><mi>i</mi></msub><msub><mi>w</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>)</mo></mrow>
+            </math>
+          </div>
+          <div class="eqn">
+            <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+              <mrow><mi>p</mi><mo>(</mo><msub><mi>v</mi><mi>i</mi></msub><mo>=</mo><mn>1</mn><mo>&#8739;</mo><mi>h</mi><mo>)</mo><mo>=</mo>
+                <mi>&#963;</mi><mo>(</mo><msub><mi>a</mi><mi>i</mi></msub><mo>+</mo>
+                <munder><mo>&#8721;</mo><mi>j</mi></munder><msub><mi>w</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>h</mi><mi>j</mi></msub><mo>)</mo></mrow>
+            </math>
+          </div>
+          <p class="small muted">This back and forth is Gibbs sampling. Each pass moves the network toward a
+            configuration that fits its learned energy. For MNIST, visible pixels drive hidden stroke and curve
+            detectors, which in turn regenerate likely pixels, reconstructing a digit.</p>
         </div>
         <div class="card">
           <h3>Live restricted Boltzmann machine</h3>
-          <p class="small muted">A tiny RBM trained on the digits. Start from a real digit, hide half of it, and watch
-            Gibbs sampling alternate between hidden and visible units to reconstruct the image. Notice how many steps it
-            takes, this slow mixing is exactly why deep EBMs prefer Langevin dynamics.</p>
+          <p class="small muted">This tiny RBM is trained on the digits in your browser. It starts from a real digit,
+            hides the bottom half, then runs Gibbs sampling to fill it back in, one visible-and-hidden pass at a time.</p>
           <div style="display:flex; gap:16px; flex-wrap:wrap; align-items:flex-start">
             <div class="canvas-frame"><canvas id="rbm-canvas"></canvas><span class="cap" id="rbm-step">Gibbs step 0</span></div>
             <div>
@@ -447,15 +583,19 @@
               <div class="small muted" id="rbm-note" style="margin-top:8px">Train first, it takes a few seconds.</div>
             </div>
           </div>
+          <div class="callout watch" style="margin-top:14px">
+            <div class="callout__label">Watch the mixing speed</div>
+            <p>Notice how many alternating steps the reconstruction needs. This slow mixing is exactly why deep EBMs
+              prefer Langevin dynamics, which follows input gradients instead of alternating layer updates.</p>
+          </div>
         </div>
       </div>
 
-      <div class="code-block" data-listing="boltzmann"></div>
-      <div class="callout intuition">
+      <div class="callout">
         <div class="callout__label">Where this leads</div>
         <p>Langevin sampling of deep EBMs led to a training idea called score matching, which in turn grew into denoising
-          diffusion models, the engine behind modern image generators. The energy view is a thread that runs from 1985
-          Boltzmann machines all the way to today's diffusion models.</p>
+          diffusion models, the engine behind modern image generators. The energy view is a thread that runs from the
+          1985 Boltzmann machine all the way to today's diffusion models.</p>
       </div>
     </section>
 
