@@ -1,8 +1,8 @@
 # Node dependencies (dev only: build scripts and smoke tests)
 node_modules/
 
-# Copyrighted source material, do not publish
-David-Foster.pdf
+# PDF files (book chapter and personal notes), do not publish
+*.pdf
 
 # Local verification output
 scratch_out/
