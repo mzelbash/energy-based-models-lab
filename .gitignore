@@ -7,6 +7,9 @@ David-Foster.pdf
 # Local verification output
 scratch_out/
 
+# Temporary scratch scripts (underscore prefix)
+build/_*.mjs
+
 # OS and editor cruft
 .DS_Store
 Thumbs.db
