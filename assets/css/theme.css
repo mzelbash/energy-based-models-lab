@@ -336,6 +336,19 @@ canvas { display: block; image-rendering: pixelated; }
 .snap-strip { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; }
 .snap { display: flex; flex-direction: column; align-items: center; gap: 4px; }
 .snap .step { font-size: 0.72rem; color: var(--ink-faint); font-weight: 700; }
+/* progress bar */
+.progress { margin: 14px 0 4px; }
+.progress__bar {
+  height: 12px; background: var(--bg-sunken); border: 1px solid var(--line);
+  border-radius: 999px; overflow: hidden;
+}
+.progress__fill {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, var(--brand), var(--accent));
+  border-radius: 999px; transition: width 0.2s ease;
+}
+.progress__label { margin-top: 6px; font-variant-numeric: tabular-nums; font-weight: 600; }
+
 .metric-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin: 12px 0; }
 .tile {
   background: var(--bg-sunken); border: 1px solid var(--line);

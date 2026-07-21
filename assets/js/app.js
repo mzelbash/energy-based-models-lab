@@ -420,24 +420,38 @@ async function runTraining() {
   if (trLoop.running) return;
   trLoop.running = true;
   setTrStatus('training', 'busy');
-  document.getElementById('tr-run').disabled = true;
+  const runBtn = document.getElementById('tr-run');
+  const prog = document.getElementById('tr-progress');
+  const progFill = document.getElementById('tr-progress-fill');
+  const progLabel = document.getElementById('tr-progress-label');
+  runBtn.disabled = true;
+  runBtn.textContent = 'Training ...';
   document.getElementById('tr-stop').disabled = false;
   Object.values(trCharts).forEach((c) => c.reset());
 
   const totalSteps = +document.getElementById('tr-steps').value;
   const cdSteps = +document.getElementById('tr-cd').value;
+
+  // reveal the progress bar right away so the click has immediate feedback
+  prog.hidden = false;
+  progFill.style.width = '0%';
+  progLabel.textContent = `starting, 0 of ${totalSteps} steps`;
+  await tf.nextFrame();
+
   const model = freshEnergyModel();
   const optimizer = tf.train.adam(1e-4);
   const buffer = createBuffer(tf, model, { size: 64, maxLen: 2048 });
   const cfg = { alpha: 0.1, cdSteps, stepSize: 10, noise: 0.005 };
 
   const trainIdx = state.split.train;
+  let done = 0;
   for (let s = 0; s < totalSteps; s++) {
     if (!trLoop.running) break;
     const idx = pickRandom(trainIdx, 64);
     const realBatch = data.batchTensor(idx);
     const m = cdTrainStep(tf, model, buffer, optimizer, realBatch, cfg);
     realBatch.dispose();
+    done = s + 1;
 
     const eReal = -m.real, eFake = -m.fake; // energy = negative score
     document.getElementById('tr-real').textContent = eReal.toFixed(2);
@@ -447,6 +461,9 @@ async function runTraining() {
     trCharts.real.push(eReal);
     trCharts.fake.push(eFake);
 
+    progFill.style.width = ((done / totalSteps) * 100).toFixed(1) + '%';
+    progLabel.textContent = `training, step ${done} of ${totalSteps}`;
+
     if (s % 5 === 0 || s === totalSteps - 1) {
       const fakes = buffer.currentSamples(24);
       viz.drawGrid(document.getElementById('tr-buffer'), fakes, { cols: 12, scale: 2, max: 24 });
@@ -454,6 +471,12 @@ async function runTraining() {
       await tf.nextFrame();
     }
   }
+
+  const completed = done >= totalSteps;
+  progFill.style.width = ((done / totalSteps) * 100).toFixed(1) + '%';
+  progLabel.textContent = completed
+    ? `training complete, ${done} steps`
+    : `stopped at step ${done} of ${totalSteps}`;
 
   // offer this freshly trained model to the rest of the app
   if (state.ebm) state.ebm.dispose();
@@ -463,8 +486,9 @@ async function runTraining() {
   buffer.dispose();
   optimizer.dispose();
   trLoop.running = false;
-  setTrStatus('done', true);
-  document.getElementById('tr-run').disabled = false;
+  setTrStatus(completed ? 'done' : 'stopped', true);
+  runBtn.disabled = false;
+  runBtn.textContent = 'Train from scratch';
   document.getElementById('tr-stop').disabled = true;
 }
 

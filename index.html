@@ -344,6 +344,10 @@
             <button class="btn" id="tr-stop" disabled>Stop</button>
             <span class="pill" id="tr-status"><span class="dot"></span><span class="txt">idle</span></span>
           </div>
+          <div class="progress" id="tr-progress" hidden>
+            <div class="progress__bar"><div class="progress__fill" id="tr-progress-fill"></div></div>
+            <div class="progress__label small muted" id="tr-progress-label">starting ...</div>
+          </div>
           <div class="metric-tiles">
             <div class="tile"><div class="k">Real energy</div><div class="v" id="tr-real">--</div></div>
             <div class="tile"><div class="k">Fake energy</div><div class="v" id="tr-fake">--</div></div>
@@ -363,6 +367,17 @@
         <p class="small muted">These are the current fake samples the training loop is contrasting against. Early on they
           are noise. As training proceeds they should start to look like digits.</p>
         <div id="tr-buffer" class="sample-grid"></div>
+        <div class="callout intuition" style="margin-bottom:0">
+          <div class="callout__label">What is the replay buffer for?</div>
+          <p>Every training step needs fake samples to push the energy up on. Producing a good fake means running the
+            Langevin sampler for many steps, which is expensive. If we started each fake from pure noise every step, we
+            would waste that work and training would crawl.</p>
+          <p>The replay buffer fixes this. It keeps a pool of the fakes produced so far, and each step it mostly reuses
+            them (with only about 5 percent freshly seeded from noise) and pushes them a few more Langevin steps. So the
+            fakes improve gradually across steps instead of restarting, which makes training much faster and gives a more
+            stable contrast between real and fake. Watch the samples above sharpen from noise into digit shapes as the
+            buffer matures.</p>
+        </div>
       </div>
 
       <details class="disclosure"><summary>Show the replay buffer code (Example 7-5)</summary>
