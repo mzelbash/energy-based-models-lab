@@ -14,16 +14,16 @@ Created by Mohamed Elbasheer. Free and open source under the MIT License.
 A student who has never heard of an energy-based model should understand it after using this
 app. Ten tabs walk through the whole pipeline:
 
-0. Start here, what an EBM is and why it matters (an EBM is a framework, not one model)
-1. Intuition, the Boltzmann distribution (interactive)
-2. The data, MNIST preprocessing (interactive inspector)
-3. The energy function E(x), architecture and swish (live scoring)
-4. Langevin sampling, noise into a digit (live animated sampler)
-5. Training, contrastive divergence (live training from scratch)
-6. Generate and analyze, a gallery and a single generation replay
-7. Other EBMs, a live restricted Boltzmann machine with Gibbs sampling
-8. Classifier as EBM, a normal classifier read as an energy
-9. Code appendix, every listing in one place
+1. Start here, what an EBM is and why it matters (an EBM is a framework, not one model)
+2. Intuition, the Boltzmann distribution (interactive)
+3. The data, MNIST preprocessing (interactive inspector)
+4. The energy function E(x), architecture and swish (live scoring)
+5. Langevin sampling, noise into a digit (live animated sampler)
+6. Training, contrastive divergence (live training from scratch)
+7. Generate and analyze, a gallery and a single generation replay
+8. Other EBMs, a live restricted Boltzmann machine with Gibbs sampling
+9. Classifier as EBM, a normal classifier read as an energy
+10. Code appendix, every listing in one place
 
 ## Run it locally
 

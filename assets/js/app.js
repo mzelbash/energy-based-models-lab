@@ -118,7 +118,7 @@ function buildTabs() {
     b.className = 'tab-btn';
     b.setAttribute('role', 'tab');
     b.dataset.tab = t.id;
-    b.innerHTML = `<span class="tab-btn__num">${i}</span>${t.label}`;
+    b.innerHTML = `<span class="tab-btn__num">${i + 1}</span>${t.label}`;
     b.addEventListener('click', () => showTab(t.id));
     bar.appendChild(b);
   });
