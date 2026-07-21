@@ -94,6 +94,18 @@
           Everything runs locally in your browser with TensorFlow.js, no internet needed.</p>
       </div>
 
+      <div class="callout">
+        <div class="callout__label">About the models in this app</div>
+        <p>This app loads two models that were pretrained offline in Python with Keras, so results look good the moment
+          you open it: a deep energy-based model that powers the Langevin sampling and generation tabs, and an ordinary
+          digit classifier used in the Classifier as EBM tab. That is what the "checkpoint loaded" badge at the top
+          means. Nothing is trained when the page loads, the weights are simply downloaded.</p>
+        <p>On the Training tab you can train the same energy-model architecture yourself, from random weights, right in
+          your browser, to watch the real algorithm learn from scratch. When that finishes, the app switches to using
+          your freshly trained model, and reloading the page brings the pretrained one back. You can read both the
+          pretraining script and the in-browser training code in the Code appendix tab.</p>
+      </div>
+
       <div class="btn-row">
         <button class="btn primary" data-goto="intuition">Start with the intuition &rarr;</button>
         <button class="btn" data-goto="langevin">Skip to the live demo</button>
@@ -730,11 +742,30 @@
     <section class="panel" id="tab-appendix" role="tabpanel" hidden>
       <div class="section-head">
         <div class="eyebrow">Reference</div>
-        <h1 class="page-title">The full Python program, annotated</h1>
-        <p class="lede">Every listing from the chapter in one place, in order, with the same annotations used across the
-          tabs. This is the complete Keras program that trains a deep energy-based model.</p>
+        <h1 class="page-title">The full code, annotated</h1>
+        <p class="lede">Every piece of code in one place: first the book's Keras listings, then the exact Python script
+          that pretrained the checkpoints this app loads on startup, and finally the TensorFlow.js code that the
+          Training tab runs to train a model from scratch in your browser.</p>
       </div>
+
+      <h2>1. The book's program (Keras)</h2>
+      <p class="small muted">The chapter's listings, Examples 7-1 through 7-7, with the same annotations used across the
+        tabs.</p>
       <div id="appendix-all"></div>
+
+      <h2>2. The script that pretrained the checkpoints (Python)</h2>
+      <p class="small muted">This is the full <span class="kbd">build/train_checkpoints.py</span>. Running it trains the
+        deep energy model with contrastive divergence and the small classifier, then exports the weight files that the
+        app downloads on startup (the "checkpoint loaded" badge). It is what produced the pretrained results you see in
+        the Langevin sampling, Generate, and Classifier tabs.</p>
+      <div id="appendix-pretrain"><p class="small muted">Loading source ...</p></div>
+
+      <h2>3. Training from scratch in your browser (TensorFlow.js)</h2>
+      <p class="small muted">This is <span class="kbd">assets/js/ebm-core.js</span>, the live port of the same
+        algorithm. When you click Train from scratch on the Training tab, the app builds a fresh, randomly initialized
+        model and runs this exact code, the Langevin sampler, the replay buffer, and the contrastive divergence step,
+        right in your browser.</p>
+      <div id="appendix-scratch"><p class="small muted">Loading source ...</p></div>
     </section>
   </main>
 

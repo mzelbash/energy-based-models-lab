@@ -4,9 +4,13 @@
 // No long dashes are used anywhere in this project.
 
 const KEYWORDS = new Set([
+  // shared and Python
   'def', 'class', 'return', 'for', 'in', 'while', 'with', 'as', 'import', 'from',
   'if', 'elif', 'else', 'and', 'or', 'not', 'is', 'lambda', 'yield', 'pass',
   'True', 'False', 'None', 'self', 'super',
+  // JavaScript
+  'const', 'let', 'var', 'function', 'async', 'await', 'new', 'of', 'this',
+  'null', 'undefined', 'true', 'false', 'export', 'typeof', 'instanceof', 'try', 'catch',
 ]);
 const BUILTINS = new Set(['range', 'len', 'print', 'zip', 'tf', 'np', 'layers', 'models',
   'optimizers', 'activations', 'metrics', 'datasets', 'random']);
@@ -15,25 +19,30 @@ function esc(ch) {
   return ch === '&' ? '&amp;' : ch === '<' ? '&lt;' : ch === '>' ? '&gt;' : ch;
 }
 
-// Single pass tokenizer, so inserted markup never gets re-matched.
-export function highlightPython(src) {
+// Single pass tokenizer, so inserted markup never gets re-matched. The lineComment
+// argument selects the comment style: "#" for Python, "//" for JavaScript.
+export function highlightCode(src, lineComment = '#') {
   let out = '';
   let i = 0;
   const n = src.length;
+  const isComment = (idx) =>
+    (lineComment === '#' && src[idx] === '#') ||
+    (lineComment === '//' && src[idx] === '/' && src[idx + 1] === '/');
   while (i < n) {
     const c = src[i];
-    if (c === '#') {
+    if (isComment(i)) {
       let j = i;
       while (j < n && src[j] !== '\n') j++;
       out += '<span class="tok-com">' + [...src.slice(i, j)].map(esc).join('') + '</span>';
       i = j;
       continue;
     }
-    if (c === '"' || c === "'") {
+    if (c === '"' || c === "'" || c === '`') {
       const q = c;
       let j = i + 1;
-      while (j < n && src[j] !== q && src[j] !== '\n') {
+      while (j < n && src[j] !== q) {
         if (src[j] === '\\') j++;
+        else if (q !== '`' && src[j] === '\n') break; // single and double do not span lines
         j++;
       }
       j = Math.min(j + 1, n);
@@ -48,9 +57,9 @@ export function highlightPython(src) {
       i = j;
       continue;
     }
-    if (/[A-Za-z_]/.test(c)) {
+    if (/[A-Za-z_$]/.test(c)) {
       let j = i;
-      while (j < n && /[A-Za-z0-9_]/.test(src[j])) j++;
+      while (j < n && /[A-Za-z0-9_$]/.test(src[j])) j++;
       const word = src.slice(i, j);
       const after = src[j];
       if (KEYWORDS.has(word)) out += '<span class="tok-kw">' + word + '</span>';
@@ -64,6 +73,19 @@ export function highlightPython(src) {
     i++;
   }
   return out;
+}
+
+export function highlightPython(src) {
+  return highlightCode(src, '#');
+}
+
+// Render a whole source file (no annotations) into a container, for the appendix.
+export function renderSource(container, code, lineComment = '#') {
+  container.innerHTML = '';
+  const pre = document.createElement('pre');
+  pre.className = 'code';
+  pre.innerHTML = highlightCode(code, lineComment);
+  container.appendChild(pre);
 }
 
 // Render one listing (title, caption, code, annotations) into a DOM element.

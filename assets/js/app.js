@@ -4,7 +4,7 @@
 
 import { initThemes } from './themes.js';
 import * as data from './data.js';
-import { LISTINGS, renderListing } from './code.js';
+import { LISTINGS, renderListing, renderSource } from './code.js';
 import * as viz from './viz.js';
 import { LineChart, drawBars } from './charts.js';
 import {
@@ -159,6 +159,24 @@ function fillListings() {
       appx.appendChild(document.createElement('hr')).className = 'soft';
     });
   }
+  fillAppendixSources();
+}
+
+// Load the real source files into the appendix so they never drift from the code.
+async function fillAppendixSources() {
+  const load = async (path, id, lineComment) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    try {
+      const res = await fetch(path);
+      if (!res.ok) throw new Error(String(res.status));
+      renderSource(el, await res.text(), lineComment);
+    } catch (e) {
+      el.innerHTML = `<p class="small muted">Could not load <span class="kbd">${path}</span> here. You can read it in the repository.</p>`;
+    }
+  };
+  load('build/train_checkpoints.py', 'appendix-pretrain', '#');
+  load('assets/js/ebm-core.js', 'appendix-scratch', '//');
 }
 
 // ===========================================================================

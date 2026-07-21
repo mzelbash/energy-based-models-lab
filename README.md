@@ -25,6 +25,31 @@ app. Ten tabs walk through the whole pipeline:
 9. Classifier as EBM, a normal classifier read as an energy
 10. Code appendix, every listing in one place
 
+## The models: pretrained checkpoints and in-browser training
+
+The app loads two models when it starts, shown by the "checkpoint loaded" badge. Both were
+trained offline in Python with Keras and exported to weight files the browser reads with
+`model.setWeights`. Nothing is trained at page load, the weights are simply downloaded.
+
+- **The deep energy-based model** (`data/checkpoints/ebm/`): the Chapter 7 energy network
+  (four Conv2D swish layers into two dense layers ending in a single scalar), trained with
+  contrastive divergence for 60 epochs on the 1,500 image MNIST subset. It powers the Langevin
+  sampling and Generate tabs so digits appear from noise instantly.
+- **An ordinary classifier** (`data/checkpoints/clf/`): a small CNN trained with plain cross
+  entropy to about 98 percent accuracy, used only in the Classifier as EBM tab.
+
+The exact script that produced both is `build/train_checkpoints.py`.
+
+The **Training tab** does something different. When you click Train from scratch it builds a
+brand new, randomly initialized copy of the same energy-model architecture and trains it live
+in your browser using TensorFlow.js, running the real contrastive divergence algorithm and the
+Langevin replay buffer from `assets/js/ebm-core.js`. When that run finishes, the app switches
+to using your freshly trained model; reload the page to return to the pretrained checkpoint.
+The classifier is never affected by in-browser training.
+
+Both the Python pretraining script and the in-browser TensorFlow.js training code are shown in
+full inside the app, on the Code appendix tab.
+
 ## Run it locally
 
 You need Python 3 (any recent version) to serve the files. The app must be served over http,
