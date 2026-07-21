@@ -412,7 +412,7 @@
       <div class="section-head">
         <div class="eyebrow">Context and history</div>
         <h1 class="page-title">The restricted Boltzmann machine</h1>
-        <p class="lede">The deep EBM you built is a modern member of an old family. The restricted Boltzmann machine
+        <p class="lede">The deep EBM we built is a modern member of an old family. The restricted Boltzmann machine
           (RBM) is one of the earliest energy-based models. It is worth understanding because it makes the energy idea
           concrete: a few units, some weights, one energy number, and a simple way to sample.</p>
       </div>
@@ -503,8 +503,7 @@
       </div>
 
       <h2>The energy of a configuration</h2>
-      <p>This is the equation that panel used to show as a bare line of code. Here is what it actually means. Every
-        energy-based model assigns one energy number to a configuration, and low energy means likely.</p>
+      <p>Every energy-based model assigns one energy number to a configuration, and low energy means likely.</p>
       <div class="split">
         <div class="card">
           <h3>General Boltzmann machine</h3>
@@ -542,6 +541,13 @@
       </div>
 
       <h2>Sampling by alternating updates</h2>
+      <div class="callout intuition">
+        <div class="callout__label">What is Gibbs sampling?</div>
+        <p>Gibbs sampling is the procedure an RBM uses to move back and forth between the visible layer and the hidden
+          layer. Starting from the current image it samples the hidden units, then from those hidden units it samples a
+          fresh image, then the hidden units again, and so on. Each back and forth pass is one Gibbs step, and repeating
+          it gradually turns a rough or partial image into a clean, plausible one.</p>
+      </div>
       <div class="split">
         <div class="card">
           <h3>Why alternation works</h3>

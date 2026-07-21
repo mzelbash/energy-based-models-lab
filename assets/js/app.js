@@ -521,8 +521,13 @@ function initOther() {
 async function trainRBM() {
   if (!state.dataReady) return;
   const note = document.getElementById('rbm-note');
-  note.textContent = 'training ...';
-  document.getElementById('rbm-train').disabled = true;
+  const trainBtn = document.getElementById('rbm-train');
+  const gibbsBtn = document.getElementById('rbm-gibbs');
+  note.style.color = '';
+  note.textContent = 'Training the RBM ...';
+  trainBtn.disabled = true;
+  trainBtn.textContent = 'Training ...';
+  gibbsBtn.disabled = true;
   await tf.nextFrame();
   if (rbm) rbm.dispose();
   rbm = new RBM();
@@ -530,16 +535,26 @@ async function trainRBM() {
   const batch = data.batchTensor(idx);
   await rbm.train(batch, {
     epochs: 12, batchSize: 64, lr: 0.05,
-    onEpoch: (e, t) => (note.textContent = `training epoch ${e} of ${t} ...`),
+    onEpoch: (e, t) => (note.textContent = `Training the RBM ... epoch ${e} of ${t}`),
   });
   batch.dispose();
-  note.textContent = 'trained. Now run Gibbs sampling from a real digit.';
-  document.getElementById('rbm-train').disabled = false;
-  document.getElementById('rbm-gibbs').disabled = false;
+  // clear success feedback, and point the student to the next step
+  note.innerHTML = '✅ <b>Training complete.</b> Now click <b>Run Gibbs sampling</b> below to watch it reconstruct a digit.';
+  note.style.color = 'var(--good)';
+  trainBtn.disabled = false;
+  trainBtn.textContent = 'Retrain the RBM';
+  trainBtn.classList.remove('primary');
+  gibbsBtn.disabled = false;
+  gibbsBtn.classList.add('primary'); // highlight the next step
 }
 
 async function runGibbs() {
   if (!rbm) return;
+  const note = document.getElementById('rbm-note');
+  const gibbsBtn = document.getElementById('rbm-gibbs');
+  gibbsBtn.disabled = true;
+  note.style.color = '';
+  note.textContent = 'Running Gibbs sampling, watch the hidden half fill in ...';
   const idx = pickRandom(state.split.train, 1);
   const batch = data.batchTensor(idx);
   let v = RBM.binarize(batch);
@@ -562,6 +577,8 @@ async function runGibbs() {
     }
   }
   v.dispose();
+  note.innerHTML = '<b>Done.</b> That was 40 Gibbs steps, one reconstruction. Click <b>Run Gibbs sampling</b> again for a new digit.';
+  gibbsBtn.disabled = false;
 }
 
 // ===========================================================================
