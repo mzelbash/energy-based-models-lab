@@ -650,6 +650,58 @@
         </div>
       </div>
 
+      <div class="card">
+        <h3>Worked example: from logits to one energy number</h3>
+        <p class="small muted">Let us follow the exact arithmetic on a single image. Suppose the classifier looks at
+          an image and outputs these ten logits <span class="kbd">f(x)</span>:</p>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin:12px 0 4px">
+          <span class="lchip"><span class="d">digit 0</span><b>1</b></span>
+          <span class="lchip"><span class="d">digit 1</span><b>2</b></span>
+          <span class="lchip win"><span class="d">digit 2</span><b>8</b></span>
+          <span class="lchip"><span class="d">digits 3 to 9</span><b>0</b></span>
+        </div>
+
+        <div class="grid cols-2" style="margin-top:8px">
+          <div>
+            <h4 style="margin:6px 0 4px">Computing the energy, E(x) = &#8722;log&#8721;e<sup>f(x)</sup></h4>
+            <div class="annot"><span class="badge">1</span><p><b>Exponentiate every logit.</b>
+              e<sup>1</sup> &asymp; 2.72, e<sup>2</sup> &asymp; 7.39, e<sup>8</sup> &asymp; 2980.96, e<sup>0</sup> = 1.
+              The seven digits with logit 0 contribute 7 &times; 1 = 7.</p></div>
+            <div class="annot"><span class="badge">2</span><p><b>Add them together</b> (this is the sum-exp part):
+              2.72 + 7.39 + 2980.96 + 7 &asymp; <b>2998.07</b>.</p></div>
+            <div class="annot"><span class="badge">3</span><p><b>Take the logarithm:</b>
+              log(2998.07) &asymp; <b>8.006</b>. Notice it lands very close to the largest logit, 8. That is why
+              log-sum-exp is called a smooth maximum.</p></div>
+            <div class="annot"><span class="badge">4</span><p><b>Add the negative sign:</b>
+              E(x) &asymp; <b>-8.006</b>. One very strong logit gives this image a low energy, so the classifier
+              finds it very plausible.</p></div>
+          </div>
+          <div>
+            <h4 style="margin:6px 0 4px">The same logits as softmax probabilities</h4>
+            <p class="small muted">Divide each exponentiated logit by the sum 2998.07:</p>
+            <div class="metric-tiles" style="grid-template-columns:1fr 1fr">
+              <div class="tile"><div class="k">Digit 2</div><div class="v">99.43%</div></div>
+              <div class="tile"><div class="k">Digit 1</div><div class="v">0.25%</div></div>
+              <div class="tile"><div class="k">Digit 0</div><div class="v">0.09%</div></div>
+              <div class="tile"><div class="k">Each of 3 to 9</div><div class="v">0.03%</div></div>
+            </div>
+            <p class="small muted" style="margin-top:10px">So the same numbers give two readings:</p>
+            <ul class="clean small">
+              <li><b>Softmax</b> asks which digit is most likely. Answer: digit 2.</li>
+              <li><b>Energy</b> asks how strong the total evidence is for this image. Answer: very strong, so the
+                energy is low (about -8).</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="callout intuition" style="margin-bottom:0">
+          <div class="callout__label">The takeaway</div>
+          <p>The energy is not based only on the winning class, it uses every logit. But because logit 8 dominates the
+            others, the log-sum-exp ends up very close to 8, and the energy ends up very close to -8. A confident
+            classifier assigns low energy, an uncertain one assigns high energy.</p>
+        </div>
+      </div>
+
       <div class="code-block" data-listing="jem"></div>
       <div class="callout">
         <div class="callout__label">Why this is useful</div>

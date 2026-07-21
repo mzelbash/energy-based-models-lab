@@ -247,6 +247,7 @@ h1.page-title { font-size: 1.9rem; line-height: 1.15; letter-spacing: -0.02em; m
 
 h2 { font-size: 1.35rem; letter-spacing: -0.01em; margin: 34px 0 10px; }
 h3 { font-size: 1.08rem; margin: 22px 0 8px; }
+h4 { font-size: 0.96rem; font-weight: 700; margin: 18px 0 6px; color: var(--ink); }
 p { max-width: 74ch; }
 a { color: var(--brand); text-decoration: none; }
 a:hover { text-decoration: underline; }
@@ -342,6 +343,17 @@ canvas { display: block; image-rendering: pixelated; }
 }
 .tile .k { font-size: 0.72rem; color: var(--ink-faint); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
 .tile .v { font-size: 1.25rem; font-weight: 750; font-variant-numeric: tabular-nums; margin-top: 2px; }
+
+/* logit chips for the worked example */
+.lchip {
+  display: inline-flex; flex-direction: column; align-items: center;
+  min-width: 60px; padding: 7px 12px;
+  border: 1px solid var(--line); border-radius: 10px; background: var(--bg-sunken);
+}
+.lchip .d { font-size: 0.68rem; color: var(--ink-faint); font-weight: 700; }
+.lchip b { font-size: 1.15rem; color: var(--ink); font-variant-numeric: tabular-nums; }
+.lchip.win { background: var(--brand-soft); border-color: color-mix(in srgb, var(--brand) 45%, var(--line)); }
+.lchip.win b { color: var(--brand); }
 
 /* ---------- Code ---------- */
 .code-toggle-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 14px 0 6px; }
