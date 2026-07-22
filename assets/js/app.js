@@ -290,7 +290,7 @@ function initEnergy() {
   arch.innerHTML = '';
   layersInfo.forEach(([name, shape], i) => {
     const row = document.createElement('div');
-    row.style.cssText = 'display:flex;justify-content:space-between;gap:10px;padding:8px 12px;border:1px solid var(--line);border-radius:8px;margin:6px 0;background:var(--bg-sunken)';
+    row.style.cssText = 'display:flex;justify-content:space-between;gap:10px;padding:8px 12px;border:1px solid var(--line);border-radius:8px;margin:6px 0;background:var(--bg-2)';
     const w = 100 - i * 9;
     row.innerHTML = `<span style="font-weight:600;font-size:0.86rem">${name}</span><span class="small muted" style="font-variant-numeric:tabular-nums">${shape}</span>`;
     row.style.marginLeft = (i * 6) + 'px';
@@ -314,7 +314,7 @@ function drawSwish() {
   const ctx = cv.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   ctx.clearRect(0, 0, w, h);
   const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-  const line = css('--line'), faint = css('--ink-faint'), brand = css('--brand'), accent = css('--accent');
+  const line = css('--line'), faint = css('--ink-3'), brand = css('--brand'), accent = css('--accent');
   const x0 = 30, y0 = h - 24, plotW = w - 45, plotH = h - 40;
   const xmin = -6, xmax = 6, ymin = -1, ymax = 6;
   const X = (x) => x0 + ((x - xmin) / (xmax - xmin)) * plotW;

@@ -39,7 +39,7 @@ export class LineChart {
     ctx.clearRect(0, 0, w, h);
 
     const ink = cssVar('--ink');
-    const faint = cssVar('--ink-faint');
+    const faint = cssVar('--ink-3');
     const line = cssVar('--line');
     const brand = this.color || cssVar('--brand');
 
@@ -122,7 +122,7 @@ export function drawBars(canvas, values, labels, { title = '', height = 170, hig
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   ctx.clearRect(0, 0, w, h);
 
-  const ink = cssVar('--ink'), faint = cssVar('--ink-faint'), brand = cssVar('--brand'), accent = cssVar('--accent');
+  const ink = cssVar('--ink'), faint = cssVar('--ink-3'), brand = cssVar('--brand'), accent = cssVar('--accent');
   const padT = 22, padB = 22, padL = 8, padR = 8;
   const plotH = h - padT - padB;
   const n = values.length;

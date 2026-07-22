@@ -88,10 +88,12 @@
 
       <div class="callout">
         <div class="callout__label">How to use this app</div>
-        <p>Move left to right through the tabs. Each tab pairs a plain explanation with a live demo you can
-          run, and with the book's actual Python code annotated line by line. Use the <span class="kbd">Theme</span>
-          switch (top right) to pick Light, Dark, or a high contrast Projector theme for a lecture room.
-          Everything runs locally in your browser with TensorFlow.js, no internet needed.</p>
+        <ul class="clean">
+          <li>Move left to right through the tabs. Each one is a step in the pipeline.</li>
+          <li>Every tab pairs a plain explanation with a live demo you can run, next to the book's actual Python code annotated line by line.</li>
+          <li>Use the <span class="kbd">Theme</span> switch (top right) for Light, Dark, or a high contrast Projector theme for a lecture room.</li>
+          <li>Everything runs locally in your browser with TensorFlow.js, no internet needed.</li>
+        </ul>
       </div>
 
       <div class="callout">
@@ -501,7 +503,7 @@
         <div class="card">
           <h3>Full Boltzmann machine</h3>
           <svg viewBox="0 0 280 172" style="width:100%;max-width:320px;height:auto;display:block;margin:6px auto" role="img" aria-label="Full Boltzmann machine with connections everywhere">
-            <g style="stroke:var(--line-strong);stroke-width:1.3;fill:none;opacity:.65">
+            <g style="stroke:var(--line-2);stroke-width:1.3;fill:none;opacity:.65">
               <line x1="60" y1="32" x2="140" y2="32"/><line x1="140" y1="32" x2="220" y2="32"/>
               <path d="M60,32 Q140,4 220,32"/>
               <line x1="60" y1="140" x2="140" y2="140"/><line x1="140" y1="140" x2="220" y2="140"/>
@@ -514,7 +516,7 @@
               <circle cx="60" cy="32" r="13" style="fill:var(--brand)"/><circle cx="140" cy="32" r="13" style="fill:var(--brand)"/><circle cx="220" cy="32" r="13" style="fill:var(--brand)"/>
               <circle cx="60" cy="140" r="13" style="fill:var(--accent)"/><circle cx="140" cy="140" r="13" style="fill:var(--accent)"/><circle cx="220" cy="140" r="13" style="fill:var(--accent)"/>
             </g>
-            <g style="fill:var(--ink-faint);font:700 12px system-ui,sans-serif">
+            <g style="fill:var(--ink-3);font:700 12px system-ui,sans-serif">
               <text x="4" y="36">v</text><text x="4" y="144">h</text>
             </g>
           </svg>
@@ -534,7 +536,7 @@
               <circle cx="40" cy="32" r="13" style="fill:var(--brand)"/><circle cx="107" cy="32" r="13" style="fill:var(--brand)"/><circle cx="174" cy="32" r="13" style="fill:var(--brand)"/><circle cx="241" cy="32" r="13" style="fill:var(--brand)"/>
               <circle cx="74" cy="140" r="13" style="fill:var(--accent)"/><circle cx="140" cy="140" r="13" style="fill:var(--accent)"/><circle cx="206" cy="140" r="13" style="fill:var(--accent)"/>
             </g>
-            <g style="fill:var(--ink-faint);font:700 12px system-ui,sans-serif">
+            <g style="fill:var(--ink-3);font:700 12px system-ui,sans-serif">
               <text x="4" y="36">v</text><text x="4" y="144">h</text>
             </g>
           </svg>
@@ -555,6 +557,7 @@
         <div class="card">
           <h3>General Boltzmann machine</h3>
           <div class="eqn">
+            <span class="eqn__label">Boltzmann machine energy</span>
             <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
               <mrow><mi>E</mi><mo>(</mo><mi>v</mi><mo>,</mo><mi>h</mi><mo>)</mo><mo>=</mo><mo>&#8722;</mo>
                 <mfrac><mn>1</mn><mn>2</mn></mfrac>
@@ -573,6 +576,7 @@
         <div class="card">
           <h3>The RBM energy</h3>
           <div class="eqn">
+            <span class="eqn__label">Restricted Boltzmann machine energy</span>
             <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
               <mrow><mi>E</mi><mo>(</mo><mi>v</mi><mo>,</mo><mi>h</mi><mo>)</mo><mo>=</mo><mo>&#8722;</mo><mo>(</mo>
                 <msup><mi>v</mi><mi>T</mi></msup><mi>W</mi><mi>h</mi><mo>+</mo>
@@ -605,6 +609,7 @@
           <div class="eqn" style="font:700 1.1rem var(--font-mono);letter-spacing:.05em">v &rarr; h &rarr; v &rarr; h &rarr; v</div>
           <p class="small muted">Each unit turns on with a probability given by a sigmoid of its inputs:</p>
           <div class="eqn">
+            <span class="eqn__label">Hidden unit activation, given the image</span>
             <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
               <mrow><mi>p</mi><mo>(</mo><msub><mi>h</mi><mi>j</mi></msub><mo>=</mo><mn>1</mn><mo>&#8739;</mo><mi>v</mi><mo>)</mo><mo>=</mo>
                 <mi>&#963;</mi><mo>(</mo><msub><mi>b</mi><mi>j</mi></msub><mo>+</mo>
@@ -612,6 +617,7 @@
             </math>
           </div>
           <div class="eqn">
+            <span class="eqn__label">Visible unit activation, given the hidden units</span>
             <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
               <mrow><mi>p</mi><mo>(</mo><msub><mi>v</mi><mi>i</mi></msub><mo>=</mo><mn>1</mn><mo>&#8739;</mo><mi>h</mi><mo>)</mo><mo>=</mo>
                 <mi>&#963;</mi><mo>(</mo><msub><mi>a</mi><mi>i</mi></msub><mo>+</mo>
