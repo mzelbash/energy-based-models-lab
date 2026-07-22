@@ -135,6 +135,7 @@
       <p>We convert an energy <span class="kbd">E(x)</span> into a probability with the Boltzmann distribution.
         Low energy gives high probability, high energy gives low probability.</p>
       <div class="eqn">
+        <span class="eqn__label">Boltzmann distribution</span>
         <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
           <mrow>
             <mi>p</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo>
@@ -165,9 +166,22 @@
 
       <div class="callout intuition">
         <div class="callout__label">The two hard problems, and the two tricks</div>
-        <p>Problem one: how do we <b>generate</b> a low energy image, not just score one? Trick: <b>Langevin dynamics</b>.
-          Problem two: the normalizing sum is <b>intractable</b>, so we cannot train by maximum likelihood directly.
-          Trick: <b>contrastive divergence</b>. You will meet both, with live demos.</p>
+        <p>Modeling data this way raises two challenges. Each one has a clever workaround that you will use later.</p>
+        <div class="duo">
+          <div class="duo__item">
+            <div class="duo__tag">Problem 1</div>
+            <p>How do we <b>generate</b> a low energy image, not just score one that already exists?</p>
+            <div class="arrow-note">The trick &darr;</div>
+            <div class="duo__tag fix">Langevin dynamics</div>
+          </div>
+          <div class="duo__item">
+            <div class="duo__tag">Problem 2</div>
+            <p>The normalizing sum is <b>intractable</b>, so we cannot train by maximum likelihood directly.</p>
+            <div class="arrow-note">The trick &darr;</div>
+            <div class="duo__tag fix">Contrastive divergence</div>
+          </div>
+        </div>
+        <p class="small muted" style="margin-bottom:0">You will meet both, with live demos.</p>
       </div>
     </section>
 
@@ -230,6 +244,7 @@
         <div class="card">
           <h3>The swish activation</h3>
           <div class="eqn">
+            <span class="eqn__label">Swish activation</span>
             <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
               <mrow><mi>swish</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mi>x</mi><mo>&#183;</mo><mi>&#963;</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo>
                 <mfrac><mi>x</mi><mrow><msup><mi>e</mi><mrow><mo>&#8722;</mo><mi>x</mi></mrow></msup><mo>+</mo><mn>1</mn></mrow></mfrac></mrow>
@@ -270,6 +285,7 @@
       </div>
 
       <div class="eqn">
+        <span class="eqn__label">Langevin dynamics update</span>
         <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
           <mrow>
             <msup><mi>x</mi><mi>k</mi></msup><mo>=</mo>
@@ -279,9 +295,12 @@
           </mrow>
         </math>
       </div>
-      <p>Read it in three parts: start from the current image, step a small amount <span class="kbd">&eta;</span> in the
-        direction that lowers the energy, then add a pinch of noise <span class="kbd">&omega;</span> so the sampler does
-        not get stuck. Repeat.</p>
+      <p>Read the update in three parts:</p>
+      <ol class="steps">
+        <li>Start from the current image.</li>
+        <li>Step a small amount <span class="kbd">&eta;</span> in the direction that lowers the energy.</li>
+        <li>Add a pinch of noise <span class="kbd">&omega;</span> so the sampler does not get stuck, then repeat.</li>
+      </ol>
 
       <div class="split">
         <div class="card">
@@ -332,6 +351,7 @@
         <div class="card">
           <h3>The loss in one line</h3>
           <div class="eqn">
+            <span class="eqn__label">Contrastive divergence loss</span>
             <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
               <mrow><mi>loss</mi><mo>=</mo><mi>E</mi><mo>(</mo><mi>real</mi><mo>)</mo><mo>&#8722;</mo><mi>E</mi><mo>(</mo><mi>fake</mi><mo>)</mo><mo>+</mo><mi>reg</mi></mrow>
             </math>
@@ -647,6 +667,7 @@
           <p>A classifier outputs ten logits <span class="kbd">f(x)</span>. The softmax of those logits is the usual class
             probability. But the same logits also define an energy over the input:</p>
           <div class="eqn">
+            <span class="eqn__label">Energy from classifier logits</span>
             <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
               <mrow><mi>E</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mo>&#8722;</mo><mi>log</mi>
                 <munder><mo>&#8721;</mo><mi>y</mi></munder>
