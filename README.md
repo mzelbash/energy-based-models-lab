@@ -117,15 +117,6 @@ data/                      MNIST sprite subset and trained checkpoints
 build/                     Python data and training scripts, plus smoke tests
 ```
 
-## Notes
-
-- No long dashes are used anywhere in this project.
-- All heavy compute runs on the TensorFlow.js WebGL backend in your browser.
-- The live training tab trains a fresh model from scratch so you can watch the real algorithm.
-  The preloaded checkpoint gives good generations instantly without waiting.
-- The generated digits are recognizable rather than pristine, which matches the book's own
-  results at this training budget.
-
 ## References and further reading
 
 If you use or build on this app, a citation to the original book is appreciated.
