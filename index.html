@@ -67,26 +67,147 @@
           </ul>
         </div>
         <figure class="viz">
-          <svg viewBox="0 0 460 290" role="img" aria-label="An energy landscape: real digits sit in the valleys, noise sits high up">
+          <svg viewBox="0 0 500 320" role="img" aria-label="An energy landscape: real digits sit in the low valleys, noise sits on the high peaks">
             <defs>
+              <linearGradient id="ebar" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0" stop-color="var(--danger)"/><stop offset=".5" stop-color="var(--warn)"/><stop offset="1" stop-color="var(--good)"/>
+              </linearGradient>
               <linearGradient id="landfill" x1="0" x2="0" y1="0" y2="1">
-                <stop offset="0" stop-color="var(--brand)" stop-opacity=".16"/><stop offset="1" stop-color="var(--brand)" stop-opacity=".02"/>
+                <stop offset="0" stop-color="var(--brand)" stop-opacity=".22"/><stop offset="1" stop-color="var(--brand)" stop-opacity=".03"/>
               </linearGradient>
             </defs>
-            <text x="16" y="24" class="v-lab">energy</text>
-            <line x1="40" y1="34" x2="40" y2="246" class="v-axis"/>
-            <line x1="40" y1="246" x2="446" y2="246" class="v-axis"/>
-            <text x="300" y="270" class="v-lab">every possible image</text>
-            <path d="M44,44 C90,44 100,206 150,206 C200,206 205,120 245,120 C285,120 300,190 345,190 C390,190 405,60 444,52 L444,246 L44,246 Z" fill="url(#landfill)"/>
-            <path d="M44,44 C90,44 100,206 150,206 C200,206 205,120 245,120 C285,120 300,190 345,190 C390,190 405,60 444,52" class="v-curve"/>
-            <g class="v-good"><circle cx="138" cy="203" r="6"/><circle cx="150" cy="206" r="6"/><circle cx="162" cy="203" r="6"/><circle cx="334" cy="188" r="6"/><circle cx="348" cy="190" r="6"/></g>
-            <circle cx="70" cy="58" r="7" class="v-bad"/><circle cx="430" cy="58" r="7" class="v-bad"/>
-            <text x="112" y="232" class="v-lab v-goodtxt">real 7s: low E</text>
-            <text x="312" y="218" class="v-lab v-goodtxt">real 1s: low E</text>
-            <text x="82" y="62" class="v-lab v-badtxt">noise: high E</text>
-            <text x="300" y="66" class="v-lab v-badtxt">noise: high E</text>
+            <rect x="22" y="40" width="12" height="200" rx="6" fill="url(#ebar)"/>
+            <text x="28" y="30" text-anchor="middle" class="lt-axis">energy</text>
+            <text x="44" y="52" class="lt-tick lt-tick--bad">high</text>
+            <text x="44" y="236" class="lt-tick lt-tick--good">low</text>
+            <path d="M66,150 C80,122 90,108 104,108 C152,108 160,230 196,230 C232,230 244,156 280,156 C316,156 328,230 364,230 C400,230 408,108 456,108 C470,108 480,122 492,150 L492,252 L66,252 Z" fill="url(#landfill)"/>
+            <path d="M66,150 C80,122 90,108 104,108 C152,108 160,230 196,230 C232,230 244,156 280,156 C316,156 328,230 364,230 C400,230 408,108 456,108 C470,108 480,122 492,150" class="lt-curve"/>
+            <line x1="62" y1="252" x2="494" y2="252" class="v-axis"/>
+            <text x="280" y="276" text-anchor="middle" class="lt-axis">all possible images</text>
+            <text x="280" y="296" text-anchor="middle" class="lt-note">(one point = one whole image)</text>
+            <circle cx="104" cy="108" r="7" class="lt-dot lt-dot--bad"/>
+            <circle cx="456" cy="108" r="7" class="lt-dot lt-dot--bad"/>
+            <circle cx="280" cy="156" r="7" class="lt-dot lt-dot--mid"/>
+            <circle cx="196" cy="230" r="8" class="lt-dot lt-dot--good"/>
+            <circle cx="364" cy="230" r="8" class="lt-dot lt-dot--good"/>
+            <g transform="translate(85,46)">
+<rect x="-3" y="-3" width="44" height="56" rx="9" class="lt-ring lt-ring--bad"/>
+<rect width="38" height="50" rx="6" class="lt-bg"/>
+<rect x="4" y="4" width="6" height="6" fill="#fff" fill-opacity="0.32"/>
+<rect x="10" y="4" width="6" height="6" fill="#fff" fill-opacity="0.15"/>
+<rect x="16" y="4" width="6" height="6" fill="#fff" fill-opacity="0.65"/>
+<rect x="28" y="4" width="6" height="6" fill="#fff" fill-opacity="0.54"/>
+<rect x="4" y="10" width="6" height="6" fill="#fff" fill-opacity="0.37"/>
+<rect x="16" y="10" width="6" height="6" fill="#fff" fill-opacity="0.51"/>
+<rect x="28" y="10" width="6" height="6" fill="#fff" fill-opacity="0.43"/>
+<rect x="16" y="16" width="6" height="6" fill="#fff" fill-opacity="0.42"/>
+<rect x="22" y="16" width="6" height="6" fill="#fff" fill-opacity="0.83"/>
+<rect x="4" y="22" width="6" height="6" fill="#fff" fill-opacity="0.22"/>
+<rect x="10" y="22" width="6" height="6" fill="#fff" fill-opacity="0.63"/>
+<rect x="16" y="22" width="6" height="6" fill="#fff" fill-opacity="0.95"/>
+<rect x="22" y="22" width="6" height="6" fill="#fff" fill-opacity="0.58"/>
+<rect x="28" y="22" width="6" height="6" fill="#fff" fill-opacity="0.40"/>
+<rect x="4" y="28" width="6" height="6" fill="#fff" fill-opacity="0.98"/>
+<rect x="16" y="28" width="6" height="6" fill="#fff" fill-opacity="0.86"/>
+<rect x="22" y="28" width="6" height="6" fill="#fff" fill-opacity="0.29"/>
+<rect x="10" y="34" width="6" height="6" fill="#fff" fill-opacity="0.31"/>
+<rect x="16" y="34" width="6" height="6" fill="#fff" fill-opacity="0.82"/>
+<rect x="22" y="34" width="6" height="6" fill="#fff" fill-opacity="0.18"/>
+<rect x="28" y="34" width="6" height="6" fill="#fff" fill-opacity="0.58"/>
+<rect x="4" y="40" width="6" height="6" fill="#fff" fill-opacity="0.64"/>
+<rect x="10" y="40" width="6" height="6" fill="#fff" fill-opacity="0.37"/>
+<rect x="16" y="40" width="6" height="6" fill="#fff" fill-opacity="0.55"/>
+</g>
+            <text x="104" y="38" text-anchor="middle" class="lt-cap lt-cap--bad">noise</text>
+            <g transform="translate(437,46)">
+<rect x="-3" y="-3" width="44" height="56" rx="9" class="lt-ring lt-ring--bad"/>
+<rect width="38" height="50" rx="6" class="lt-bg"/>
+<rect x="4" y="4" width="6" height="6" fill="#fff" fill-opacity="0.21"/>
+<rect x="10" y="4" width="6" height="6" fill="#fff" fill-opacity="0.68"/>
+<rect x="16" y="4" width="6" height="6" fill="#fff" fill-opacity="0.43"/>
+<rect x="22" y="4" width="6" height="6" fill="#fff" fill-opacity="0.31"/>
+<rect x="28" y="4" width="6" height="6" fill="#fff" fill-opacity="0.59"/>
+<rect x="4" y="10" width="6" height="6" fill="#fff" fill-opacity="0.45"/>
+<rect x="10" y="10" width="6" height="6" fill="#fff" fill-opacity="0.30"/>
+<rect x="16" y="10" width="6" height="6" fill="#fff" fill-opacity="0.79"/>
+<rect x="22" y="10" width="6" height="6" fill="#fff" fill-opacity="0.70"/>
+<rect x="28" y="10" width="6" height="6" fill="#fff" fill-opacity="0.24"/>
+<rect x="4" y="16" width="6" height="6" fill="#fff" fill-opacity="0.57"/>
+<rect x="10" y="16" width="6" height="6" fill="#fff" fill-opacity="0.53"/>
+<rect x="16" y="16" width="6" height="6" fill="#fff" fill-opacity="0.88"/>
+<rect x="22" y="16" width="6" height="6" fill="#fff" fill-opacity="0.73"/>
+<rect x="28" y="16" width="6" height="6" fill="#fff" fill-opacity="0.29"/>
+<rect x="4" y="22" width="6" height="6" fill="#fff" fill-opacity="0.98"/>
+<rect x="16" y="22" width="6" height="6" fill="#fff" fill-opacity="0.42"/>
+<rect x="22" y="22" width="6" height="6" fill="#fff" fill-opacity="0.76"/>
+<rect x="28" y="22" width="6" height="6" fill="#fff" fill-opacity="0.15"/>
+<rect x="4" y="28" width="6" height="6" fill="#fff" fill-opacity="0.49"/>
+<rect x="16" y="28" width="6" height="6" fill="#fff" fill-opacity="0.67"/>
+<rect x="22" y="28" width="6" height="6" fill="#fff" fill-opacity="0.76"/>
+<rect x="28" y="28" width="6" height="6" fill="#fff" fill-opacity="0.57"/>
+<rect x="4" y="34" width="6" height="6" fill="#fff" fill-opacity="0.88"/>
+<rect x="10" y="34" width="6" height="6" fill="#fff" fill-opacity="0.31"/>
+<rect x="16" y="34" width="6" height="6" fill="#fff" fill-opacity="0.70"/>
+<rect x="22" y="34" width="6" height="6" fill="#fff" fill-opacity="0.59"/>
+<rect x="28" y="34" width="6" height="6" fill="#fff" fill-opacity="0.58"/>
+<rect x="4" y="40" width="6" height="6" fill="#fff" fill-opacity="0.46"/>
+<rect x="10" y="40" width="6" height="6" fill="#fff" fill-opacity="0.84"/>
+<rect x="16" y="40" width="6" height="6" fill="#fff" fill-opacity="0.94"/>
+<rect x="22" y="40" width="6" height="6" fill="#fff" fill-opacity="0.47"/>
+<rect x="28" y="40" width="6" height="6" fill="#fff" fill-opacity="0.66"/>
+</g>
+            <text x="456" y="38" text-anchor="middle" class="lt-cap lt-cap--bad">noise</text>
+            <g transform="translate(261,94)">
+<rect x="-3" y="-3" width="44" height="56" rx="9" class="lt-ring lt-ring--mid"/>
+<rect width="38" height="50" rx="6" class="lt-bg"/>
+<rect x="4" y="4" width="6" height="6" fill="#fff" fill-opacity="0.42"/>
+<rect x="10" y="4" width="6" height="6" fill="#fff" fill-opacity="0.90"/>
+<rect x="16" y="4" width="6" height="6" fill="#fff" fill-opacity="0.90"/>
+<rect x="22" y="4" width="6" height="6" fill="#fff" fill-opacity="0.90"/>
+<rect x="28" y="4" width="6" height="6" fill="#fff" fill-opacity="0.23"/>
+<rect x="10" y="10" width="6" height="6" fill="#fff" fill-opacity="0.28"/>
+<rect x="22" y="10" width="6" height="6" fill="#fff" fill-opacity="0.46"/>
+<rect x="16" y="16" width="6" height="6" fill="#fff" fill-opacity="0.27"/>
+<rect x="22" y="16" width="6" height="6" fill="#fff" fill-opacity="0.90"/>
+<rect x="16" y="22" width="6" height="6" fill="#fff" fill-opacity="0.25"/>
+<rect x="10" y="34" width="6" height="6" fill="#fff" fill-opacity="0.90"/>
+<rect x="10" y="40" width="6" height="6" fill="#fff" fill-opacity="0.90"/>
+<rect x="28" y="40" width="6" height="6" fill="#fff" fill-opacity="0.54"/>
+</g>
+            <text x="280" y="86" text-anchor="middle" class="lt-cap lt-cap--mid">half a 7</text>
+            <g transform="translate(177,152)">
+<rect x="-3" y="-3" width="44" height="56" rx="9" class="lt-ring lt-ring--good"/>
+<rect width="38" height="50" rx="6" class="lt-bg"/>
+<rect x="4" y="4" width="6" height="6" fill="#fff" fill-opacity="1.00"/>
+<rect x="10" y="4" width="6" height="6" fill="#fff" fill-opacity="1.00"/>
+<rect x="16" y="4" width="6" height="6" fill="#fff" fill-opacity="1.00"/>
+<rect x="22" y="4" width="6" height="6" fill="#fff" fill-opacity="1.00"/>
+<rect x="28" y="4" width="6" height="6" fill="#fff" fill-opacity="1.00"/>
+<rect x="28" y="10" width="6" height="6" fill="#fff" fill-opacity="1.00"/>
+<rect x="22" y="16" width="6" height="6" fill="#fff" fill-opacity="1.00"/>
+<rect x="16" y="22" width="6" height="6" fill="#fff" fill-opacity="1.00"/>
+<rect x="16" y="28" width="6" height="6" fill="#fff" fill-opacity="1.00"/>
+<rect x="10" y="34" width="6" height="6" fill="#fff" fill-opacity="1.00"/>
+<rect x="10" y="40" width="6" height="6" fill="#fff" fill-opacity="1.00"/>
+</g>
+            <text x="196" y="144" text-anchor="middle" class="lt-cap lt-cap--good">a real 7</text>
+            <g transform="translate(345,152)">
+<rect x="-3" y="-3" width="44" height="56" rx="9" class="lt-ring lt-ring--good"/>
+<rect width="38" height="50" rx="6" class="lt-bg"/>
+<rect x="16" y="4" width="6" height="6" fill="#fff" fill-opacity="1.00"/>
+<rect x="10" y="10" width="6" height="6" fill="#fff" fill-opacity="1.00"/>
+<rect x="16" y="10" width="6" height="6" fill="#fff" fill-opacity="1.00"/>
+<rect x="16" y="16" width="6" height="6" fill="#fff" fill-opacity="1.00"/>
+<rect x="16" y="22" width="6" height="6" fill="#fff" fill-opacity="1.00"/>
+<rect x="16" y="28" width="6" height="6" fill="#fff" fill-opacity="1.00"/>
+<rect x="16" y="34" width="6" height="6" fill="#fff" fill-opacity="1.00"/>
+<rect x="10" y="40" width="6" height="6" fill="#fff" fill-opacity="1.00"/>
+<rect x="16" y="40" width="6" height="6" fill="#fff" fill-opacity="1.00"/>
+<rect x="22" y="40" width="6" height="6" fill="#fff" fill-opacity="1.00"/>
+</g>
+            <text x="364" y="144" text-anchor="middle" class="lt-cap lt-cap--good">a real 1</text>
           </svg>
-          <figcaption>Real data sits in the <b>valleys</b>. Everything else sits up high.</figcaption>
+          <figcaption>Real digits sit in the <b>valleys</b> (low energy). Noise sits on the <b>peaks</b> (high energy). Half-formed images land in between.</figcaption>
         </figure>
       </div>
 
