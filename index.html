@@ -57,7 +57,7 @@
 
       <div class="learn">
         <div class="learn__text">
-          <h2 class="sec-title">What to know</h2>
+          <h2 class="sec-title">How it works</h2>
           <ul class="bullets">
             <li>The model is <b>one network</b> that reads an input and returns <b>one number</b>, the energy <span class="kbd">E(x)</span>.</li>
             <li><b>Low energy</b>: looks like real data. <b>High energy</b>: does not, like random noise.</li>
@@ -250,7 +250,7 @@
 
       <div class="learn">
         <div class="learn__text">
-          <h2 class="sec-title">What to know</h2>
+          <h2 class="sec-title">How it works</h2>
           <ul class="bullets">
             <li>The rule: <span class="kbd">p(x) = e<sup>&minus;E(x)</sup> / Z</span>.</li>
             <li><b>e<sup>&minus;E</sup></b> turns energy into a weight: low energy, big weight, never negative.</li>
@@ -324,7 +324,7 @@
 
       <div class="learn">
         <div class="learn__text">
-          <h2 class="sec-title">What to know</h2>
+          <h2 class="sec-title">How it works</h2>
           <ul class="bullets">
             <li><b>Data:</b> MNIST digits, pixels scaled to [&minus;1, 1], padded from 28 &times; 28 to 32 &times; 32.</li>
             <li><b>Network:</b> four stride-2 convolutions shrink the image, two dense layers end in <b>one number</b>.</li>
@@ -405,7 +405,7 @@
 
       <div class="learn">
         <div class="learn__text">
-          <h2 class="sec-title">What to know</h2>
+          <h2 class="sec-title">How it works</h2>
           <ul class="bullets">
             <li>The update: <span class="kbd">x &larr; x &minus; &eta; &nabla;<sub>x</sub>E(x) + noise</span>.</li>
             <li><span class="kbd">&nabla;<sub>x</sub>E</span> says how each pixel should change to <b>lower</b> the energy.</li>
@@ -506,7 +506,7 @@
 
       <div class="learn">
         <div class="learn__text">
-          <h2 class="sec-title">What to know</h2>
+          <h2 class="sec-title">How it works</h2>
           <ul class="bullets">
             <li><b>Positives</b>: real images. <b>Negatives</b>: what the current model makes with Langevin.</li>
             <li>Negatives show the model <b>where it is wrong right now</b>: places it rates low that are not real.</li>
@@ -613,7 +613,7 @@
 
       <div class="learn learn--single">
         <div class="learn__text">
-          <h2 class="sec-title">What to know</h2>
+          <h2 class="sec-title">How it works</h2>
           <ul class="bullets">
             <li>The energy of a pair is just <span class="kbd">E(x, y) = &minus;logit<sub>y</sub></span>. High logit, low energy.</li>
             <li>Softmax over those energies <b>is</b> the Boltzmann distribution over the 10 labels.</li>
