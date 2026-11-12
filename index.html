@@ -8,14 +8,21 @@
   <link rel="stylesheet" href="assets/css/theme.css" />
 </head>
 <body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z"/></marker>
+      <marker id="ah-good" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z"/></marker>
+      <marker id="ah-bad" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z"/></marker>
+      <marker id="ah-violet" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z"/></marker>
+    </defs>
+  </svg>
   <header class="app-header">
     <div class="app-header__bar">
       <div class="brand">
         <div class="brand__mark">E</div>
         <div>
           <div class="brand__title">Energy-Based Models</div>
-          <div class="brand__sub">A hands on lab based on Generative Deep Learning, chapter 7, by David Foster</div>
-          <div class="brand__sub">Created by Mohamed Elbasheer</div>
+          <div class="brand__sub">A hands-on lab for Generative Deep Learning, chapter 7 &middot; by Mohamed Elbasheer</div>
         </div>
       </div>
       <div class="header-spacer"></div>
@@ -33,131 +40,132 @@
 
   <nav class="tabs">
     <div class="tabs__inner" id="tabbar" role="tablist"></div>
+    <div class="tabs__progress"><div class="tabs__progress-fill" id="tab-progress"></div></div>
   </nav>
 
   <main>
-    <!-- ============================ TAB 0: START HERE ============================ -->
-    <section class="panel" id="tab-start" role="tabpanel">
-      <div class="section-head">
-        <div class="eyebrow">Start here</div>
-        <h1 class="page-title">What is an energy-based model, and why should you care?</h1>
-        <p class="lede"><strong style="color:var(--brand);text-decoration:underline">Read this page first.</strong> By the end of it you will understand the core idea,
-          even if you have never heard the term before. The rest of the app then lets you build,
-          sample from, and train one, step by step, in your browser.</p>
-      </div>
+    <!-- ============================ 1. THE IDEA ============================ -->
+    <section class="panel" id="tab-idea" role="tabpanel" data-color="good">
+      <header class="hero">
+        <div class="hero__step">Step 1 of 6</div>
+        <h1 class="hero__title">The idea: an energy is a score</h1>
+        <p class="hero__sub">An energy-based model gives every possible input one number. Low means it fits, high means it does not.</p>
+      </header>
 
-      <div class="grid cols-3">
-        <div class="card">
-          <h3>1. What it is</h3>
-          <p>An energy-based model learns a single function, the <b>energy</b> <span class="kbd">E(x)</span>,
-            that scores any input with one number. <b>Low energy means plausible</b> (looks like real data),
-            <b>high energy means implausible</b>. That is the whole idea.</p>
+      <div class="keyidea"><span class="keyidea__tag">Key idea</span>
+        <p>Low energy means <b>this is the kind of image the model has seen</b>. High energy means it is not.</p></div>
+
+      <div class="learn">
+        <div class="learn__text">
+          <h2 class="sec-title">What to know</h2>
+          <ul class="bullets">
+            <li>The model is <b>one network</b> that reads an input and returns <b>one number</b>, the energy <span class="kbd">E(x)</span>.</li>
+            <li><b>Low energy</b>: looks like real data. <b>High energy</b>: does not, like random noise.</li>
+            <li>It does not pick one answer. It <b>scores every answer</b>, and choosing is a separate step.</li>
+            <li>Two forms: <span class="kbd">E(x)</span> asks "is x plausible?", <span class="kbd">E(x, y)</span> asks "do x and y go together?"</li>
+            <li>It is <b>not a new architecture</b>: any network that outputs one number can be an energy.</li>
+          </ul>
         </div>
-        <div class="card">
-          <h3>2. Why we need it</h3>
-          <p>Instead of forcing a model to output a proper probability, which needs an impossible
-            normalizing sum, we only learn a relative score. This lets the model represent very
-            flexible distributions, and it turns "is this realistic?" into "what is the energy?".</p>
+        <figure class="viz">
+          <svg viewBox="0 0 460 290" role="img" aria-label="An energy landscape: real digits sit in the valleys, noise sits high up">
+            <defs>
+              <linearGradient id="landfill" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0" stop-color="var(--brand)" stop-opacity=".16"/><stop offset="1" stop-color="var(--brand)" stop-opacity=".02"/>
+              </linearGradient>
+            </defs>
+            <text x="16" y="24" class="v-lab">energy</text>
+            <line x1="40" y1="34" x2="40" y2="246" class="v-axis"/>
+            <line x1="40" y1="246" x2="446" y2="246" class="v-axis"/>
+            <text x="300" y="270" class="v-lab">every possible image</text>
+            <path d="M44,44 C90,44 100,206 150,206 C200,206 205,120 245,120 C285,120 300,190 345,190 C390,190 405,60 444,52 L444,246 L44,246 Z" fill="url(#landfill)"/>
+            <path d="M44,44 C90,44 100,206 150,206 C200,206 205,120 245,120 C285,120 300,190 345,190 C390,190 405,60 444,52" class="v-curve"/>
+            <g class="v-good"><circle cx="138" cy="203" r="6"/><circle cx="150" cy="206" r="6"/><circle cx="162" cy="203" r="6"/><circle cx="334" cy="188" r="6"/><circle cx="348" cy="190" r="6"/></g>
+            <circle cx="70" cy="58" r="7" class="v-bad"/><circle cx="430" cy="58" r="7" class="v-bad"/>
+            <text x="112" y="232" class="v-lab v-goodtxt">real 7s: low E</text>
+            <text x="312" y="218" class="v-lab v-goodtxt">real 1s: low E</text>
+            <text x="82" y="62" class="v-lab v-badtxt">noise: high E</text>
+            <text x="300" y="66" class="v-lab v-badtxt">noise: high E</text>
+          </svg>
+          <figcaption>Real data sits in the <b>valleys</b>. Everything else sits up high.</figcaption>
+        </figure>
+      </div>
+
+      <h2 class="sec-title">One input in, one number out</h2>
+      <div class="flow">
+        <div class="flow__box"><div class="flow__k">input x</div><div class="flow__v">an image</div></div>
+        <div class="flow__arrow">&rarr;</div>
+        <div class="flow__box flow__box--net"><div class="flow__k">network</div><div class="flow__v">E<sub>&theta;</sub></div></div>
+        <div class="flow__arrow">&rarr;</div>
+        <div class="flow__box"><div class="flow__k">output</div><div class="flow__v">one number</div></div>
+        <div class="flow__examples">
+          <div class="chip chip--good">real 7 &rarr; E = 0.3</div>
+          <div class="chip chip--bad">noise &rarr; E = 8</div>
         </div>
-        <div class="card">
-          <h3>3. What you will do</h3>
-          <p>You will watch random noise turn into a handwritten digit by rolling downhill on the
-            energy surface, then train the energy function yourself and watch the samples sharpen.</p>
-        </div>
       </div>
 
-      <div class="callout intuition">
-        <div class="callout__label">Key framing</div>
-        <p>An energy-based model is a <b>framework, not one specific model</b>. Many models are energy-based
-          models underneath: the deep network you will build here, the classic Boltzmann machine and
-          restricted Boltzmann machine, and even an ordinary image classifier. They all define an energy
-          over their inputs. Once you see the pattern, you see it everywhere.</p>
+      <h2 class="sec-title">The road map</h2>
+      <div class="roadmap">
+        <button class="road" data-goto="boltzmann"><span class="road__n">2</span><b>Energy to probability</b><span>Low energy becomes high probability</span></button>
+        <button class="road" data-goto="network"><span class="road__n">3</span><b>The energy network</b><span>A CNN that scores an image</span></button>
+        <button class="road" data-goto="langevin"><span class="road__n">4</span><b>Langevin sampling</b><span>Roll noise downhill into a digit</span></button>
+        <button class="road" data-goto="training"><span class="road__n">5</span><b>Training</b><span>Real energy down, fake energy up</span></button>
+        <button class="road" data-goto="classifier"><span class="road__n">6</span><b>Your classifier is an EBM</b><span>The same idea in a model you know</span></button>
       </div>
 
-      <h2>The whole pipeline on one screen</h2>
-      <p>Every tab in this app is one box in this pipeline. Here is where you are headed.</p>
-      <div class="pipeline">
-        <div class="pipe-step"><div class="n">STEP 1</div><div class="t">Energy function</div><div class="d">A neural network that scores an image with one number.</div></div>
-        <div class="pipe-arrow">&rarr;</div>
-        <div class="pipe-step"><div class="n">STEP 2</div><div class="t">Langevin sampling</div><div class="d">Roll noise downhill on the energy to generate images.</div></div>
-        <div class="pipe-arrow">&rarr;</div>
-        <div class="pipe-step"><div class="n">STEP 3</div><div class="t">Contrastive divergence</div><div class="d">Train by pushing real energy down and fake energy up.</div></div>
-        <div class="pipe-arrow">&rarr;</div>
-        <div class="pipe-step"><div class="n">STEP 4</div><div class="t">Generate and analyze</div><div class="d">Watch a digit appear from pure noise.</div></div>
-      </div>
-
-      <div class="callout">
-        <div class="callout__label">How to use this app</div>
-        <ul class="clean">
-          <li>Move left to right through the tabs. Each one is a step in the pipeline.</li>
-          <li>Every tab pairs a plain explanation with a live demo you can run, next to the book's actual Python code annotated line by line.</li>
-          <li>Use the <span class="kbd">Theme</span> switch (top right) for Light, Dark, or a high contrast Projector theme for a lecture room.</li>
-          <li>Everything runs locally in your browser with TensorFlow.js, no internet needed.</li>
-        </ul>
-      </div>
-
-      <div class="callout">
-        <div class="callout__label">About the models in this app</div>
-        <p>This app loads two models that were pretrained offline in Python with Keras, so results look good the moment
-          you open it: a deep energy-based model that powers the Langevin sampling and generation tabs, and an ordinary
-          digit classifier used in the Classifier as EBM tab. That is what the "checkpoint loaded" badge at the top
-          means. Nothing is trained when the page loads, the weights are simply downloaded.</p>
-        <p>On the Training tab you can train the same energy-model architecture yourself, from random weights, right in
-          your browser, to watch the real algorithm learn from scratch. When that finishes, the app switches to using
-          your freshly trained model, and reloading the page brings the pretrained one back. You can read both the
-          pretraining script and the in-browser training code in the Code appendix tab.</p>
-      </div>
-
-      <div class="btn-row">
-        <button class="btn primary" data-goto="intuition">Start with the intuition &rarr;</button>
-        <button class="btn" data-goto="langevin">Skip to the live demo</button>
-      </div>
+      <div class="takeaway"><b>Takeaway:</b> an EBM rates every input with one number. The good ones have low energy.</div>
+      <p class="fineprint">The models in this lab were pretrained in Python and load when the page opens (the green "checkpoint loaded" badge). Everything runs in your browser.</p>
     </section>
 
-    <!-- ============================ TAB 1: INTUITION ============================ -->
-    <section class="panel" id="tab-intuition" role="tabpanel" hidden>
-      <div class="section-head">
-        <div class="eyebrow">The idea</div>
-        <h1 class="page-title">Energy, scores, and the Boltzmann distribution</h1>
-        <p class="lede">Physics gives us a clean way to turn any energy score into a probability. That single
-          equation is the foundation of everything that follows.</p>
+    <!-- ============================ 2. ENERGY TO PROBABILITY ============================ -->
+    <section class="panel" id="tab-boltzmann" role="tabpanel" data-color="warn" hidden>
+      <header class="hero">
+        <div class="hero__step">Step 2 of 6</div>
+        <h1 class="hero__title">From energy to probability</h1>
+        <p class="hero__sub">Physics gives one rule that turns any energy into a probability: the lower the energy, the more likely.</p>
+      </header>
+
+      <div class="keyidea"><span class="keyidea__tag">Key idea</span>
+        <p>The higher the energy, the rarer the state. The Boltzmann distribution makes that exact.</p></div>
+
+      <div class="learn">
+        <div class="learn__text">
+          <h2 class="sec-title">What to know</h2>
+          <ul class="bullets">
+            <li>The rule: <span class="kbd">p(x) = e<sup>&minus;E(x)</sup> / Z</span>.</li>
+            <li><b>e<sup>&minus;E</sup></b> turns energy into a weight: low energy, big weight, never negative.</li>
+            <li><b>Z</b> adds up every weight so the probabilities sum to 1.</li>
+            <li>For images, Z must add up <b>every possible image</b>: about 10<sup>1,888</sup> of them for 28 &times; 28. Impossible.</li>
+            <li>The good news: training and sampling only need <b>differences</b> in energy, so Z cancels out.</li>
+          </ul>
+        </div>
+        <figure class="viz">
+          <svg viewBox="0 0 460 290" role="img" aria-label="Four energies turned into four probabilities">
+            <text x="20" y="26" class="v-lab">energy E</text>
+            <text x="262" y="26" class="v-lab">probability p</text>
+            <g>
+              <rect x="20" y="44" width="40" height="18" rx="4" class="v-goodfill"/><text x="66" y="58" class="v-num">0.5</text>
+              <rect x="20" y="92" width="80" height="18" rx="4" class="v-midfill"/><text x="106" y="106" class="v-num">1</text>
+              <rect x="20" y="140" width="150" height="18" rx="4" class="v-midfill"/><text x="176" y="154" class="v-num">3</text>
+              <rect x="20" y="188" width="200" height="18" rx="4" class="v-badfill"/><text x="226" y="202" class="v-num">8</text>
+            </g>
+            <g class="v-arrow"><line x1="196" y1="53" x2="250" y2="53"/><line x1="196" y1="101" x2="250" y2="101"/><line x1="196" y1="149" x2="250" y2="149"/><line x1="246" y1="197" x2="256" y2="197"/></g>
+            <g>
+              <rect x="262" y="44" width="160" height="18" rx="4" class="v-goodfill"/><text x="428" y="58" class="v-num">59%</text>
+              <rect x="262" y="92" width="97" height="18" rx="4" class="v-midfill"/><text x="365" y="106" class="v-num">36%</text>
+              <rect x="262" y="140" width="14" height="18" rx="4" class="v-midfill"/><text x="282" y="154" class="v-num">5%</text>
+              <rect x="262" y="188" width="3" height="18" rx="2" class="v-badfill"/><text x="272" y="202" class="v-num">0.03%</text>
+            </g>
+            <text x="20" y="250" class="v-lab">low energy</text><text x="128" y="250" class="v-lab">&rarr;</text><text x="152" y="250" class="v-lab v-goodtxt">high probability</text>
+            <text x="20" y="276" class="v-lab">differences get bigger: 0.5 vs 8 becomes 59% vs 0.03%</text>
+          </svg>
+          <figcaption>Four images, four energies. <b>e<sup>&minus;E</sup> &divide; Z</b> turns them into probabilities.</figcaption>
+        </figure>
       </div>
 
-      <div class="card">
-        <h3>A short story, the running coach</h3>
-        <p>Diane Mixx could judge a runner just by sensing their leftover energy after a race. Elite runners
-          finished with very little energy left, they gave everything. To turn an average runner into an elite
-          one, she measured their current energy, worked out the small adjustment that would lower it next time,
-          and repeated. Over many small steps, an ordinary runner became indistinguishable from a champion.</p>
-        <p>That is exactly an energy-based model. The energy function judges how realistic something is, and a
-          sampler makes many small downhill adjustments until noise becomes realistic.</p>
-      </div>
-
-      <h2>The Boltzmann distribution</h2>
-      <p>We convert an energy <span class="kbd">E(x)</span> into a probability with the Boltzmann distribution.
-        Low energy gives high probability, high energy gives low probability.</p>
-      <div class="eqn">
-        <span class="eqn__label">Boltzmann distribution</span>
-        <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
-          <mrow>
-            <mi>p</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo>
-            <mfrac>
-              <msup><mi>e</mi><mrow><mo>&#8722;</mo><mi>E</mi><mo>(</mo><mi>x</mi><mo>)</mo></mrow></msup>
-              <mrow><mo>&#8747;</mo><msup><mi>e</mi><mrow><mo>&#8722;</mo><mi>E</mi><mo>(</mo><mover><mi>x</mi><mo>^</mo></mover><mo>)</mo></mrow></msup><mi>d</mi><mover><mi>x</mi><mo>^</mo></mover></mrow>
-            </mfrac>
-          </mrow>
-        </math>
-      </div>
-      <p>The bottom is the tricky part: a sum over <i>every possible image</i>. It keeps the total probability at 1,
-        but it is impossible to compute for real problems. The clever trick of energy-based models is that, using the
-        right training and sampling methods, <b>we never need to compute it</b>.</p>
-
+      <h2 class="sec-title">Try it</h2>
       <div class="split">
         <div class="card">
-          <h3>Try it, energy to probability</h3>
-          <p class="small muted">Drag the sliders to set the energy of four candidate images. Watch how the
-            Boltzmann distribution converts these energies into probabilities. Notice that only differences in
-            energy matter, and the lowest energy always wins the largest probability.</p>
+          <h3>Set the energy of four images</h3>
           <div id="boltz-controls"></div>
         </div>
         <div class="card">
@@ -165,212 +173,246 @@
           <div id="boltz-note" class="small muted" style="margin-top:8px"></div>
         </div>
       </div>
-
-      <div class="callout intuition">
-        <div class="callout__label">The two hard problems, and the two tricks</div>
-        <p>Modeling data this way raises two challenges. Each one has a clever workaround that you will use later.</p>
-        <div class="duo">
-          <div class="duo__item">
-            <div class="duo__tag">Problem 1</div>
-            <p>How do we <b>generate</b> a low energy image, not just score one that already exists?</p>
-            <div class="arrow-note">The trick &darr;</div>
-            <div class="duo__tag fix">Langevin dynamics</div>
-          </div>
-          <div class="duo__item">
-            <div class="duo__tag">Problem 2</div>
-            <p>The normalizing sum is <b>intractable</b>, so we cannot train by maximum likelihood directly.</p>
-            <div class="arrow-note">The trick &darr;</div>
-            <div class="duo__tag fix">Contrastive divergence</div>
-          </div>
-        </div>
-        <p class="small muted" style="margin-bottom:0">You will meet both, with live demos.</p>
+      <div class="trythis"><span class="trythis__tag">Try this</span>
+        <ul class="bullets">
+          <li>Make one energy the lowest. It always gets the biggest bar.</li>
+          <li>Add 2 to every energy. The bars do not change: <b>only differences matter</b>, which is why Z can cancel.</li>
+        </ul>
       </div>
+
+      <h2 class="sec-title">The two problems this creates, and the two fixes</h2>
+      <div class="duo2">
+        <div class="duo2__item"><div class="duo2__tag duo2__tag--bad">Problem</div><p>How do we <b>make</b> a low-energy image, not just score one?</p><div class="duo2__fix">Fix: <b>Langevin sampling</b> (step 4)</div></div>
+        <div class="duo2__item"><div class="duo2__tag duo2__tag--bad">Problem</div><p>Z is impossible, so we cannot train by plain maximum likelihood.</p><div class="duo2__fix">Fix: <b>contrastive divergence</b> (step 5)</div></div>
+      </div>
+
+      <div class="takeaway"><b>Takeaway:</b> p(x) = e<sup>&minus;E(x)</sup> / Z. Low energy, high probability. We never compute Z.</div>
+      <details class="codefold"><summary>Show the book's code</summary><div class="codefold__body"><div data-listing="boltzmann"></div></div></details>
     </section>
 
-    <!-- ============================ TAB 2: DATA ============================ -->
-    <section class="panel" id="tab-data" role="tabpanel" hidden>
-      <div class="section-head">
-        <div class="eyebrow">The data</div>
-        <h1 class="page-title">MNIST, prepared for the model</h1>
-        <p class="lede">We use a small, balanced set of handwritten digits. Before the network sees them, two simple
-          preprocessing steps put the pixels in a friendly range and shape.</p>
+    <!-- ============================ 3. THE ENERGY NETWORK ============================ -->
+    <section class="panel" id="tab-network" role="tabpanel" data-color="brand" hidden>
+      <header class="hero">
+        <div class="hero__step">Step 3 of 6</div>
+        <h1 class="hero__title">The energy network E(x)</h1>
+        <p class="hero__sub">A small CNN that reads a 32 &times; 32 digit and returns one number. That number is the energy.</p>
+      </header>
+
+      <div class="keyidea"><span class="keyidea__tag">Key idea</span>
+        <p>The energy is just the output of a normal neural network. A trained one gives real digits lower energy than noise.</p></div>
+
+      <div class="learn">
+        <div class="learn__text">
+          <h2 class="sec-title">What to know</h2>
+          <ul class="bullets">
+            <li><b>Data:</b> MNIST digits, pixels scaled to [&minus;1, 1], padded from 28 &times; 28 to 32 &times; 32.</li>
+            <li><b>Network:</b> four stride-2 convolutions shrink the image, two dense layers end in <b>one number</b>.</li>
+            <li>The last layer is <b>linear</b>, so the energy can be any real number.</li>
+            <li><b>Swish</b> instead of ReLU: it is smooth, and sampling needs smooth gradients with respect to the pixels.</li>
+          </ul>
+        </div>
+        <div class="card"><h3>The architecture</h3><div id="arch-diagram"></div></div>
       </div>
 
-      <div class="split">
-        <div class="card">
-          <h3>Real digits from the dataset</h3>
-          <p class="small muted">A sample of the bundled MNIST subset (1500 training and 200 test digits).</p>
-          <div id="data-grid" class="sample-grid"></div>
-          <div class="btn-row"><button class="btn" id="data-reshuffle">Show another sample</button></div>
-        </div>
-        <div class="card">
-          <h3>Preprocessing, inspect one digit</h3>
-          <p class="small muted">Pixels are rescaled from 0..255 to the range -1..1, then the 28 by 28 image is
-            padded to 32 by 32 with the background value. Hover over the grid to read a pixel value.</p>
-          <div style="display:flex; gap:16px; flex-wrap:wrap; align-items:flex-start">
-            <div class="canvas-frame"><canvas id="data-inspect"></canvas><span class="cap">32 by 32, values in [-1, 1]</span></div>
-            <div>
-              <div class="metric-tiles" style="grid-template-columns:1fr">
-                <div class="tile"><div class="k">Hovered pixel</div><div class="v" id="px-val">--</div></div>
-              </div>
-              <div class="small muted" id="px-hint">Move your mouse over the image.</div>
-            </div>
-          </div>
-          <div class="btn-row"><button class="btn" id="data-next">Next digit</button></div>
-        </div>
-      </div>
-
-      <div class="code-block" data-listing="preprocess"></div>
-      <details class="disclosure"><summary>Show the loading code (Example 7-1)</summary>
-        <div class="disclosure__body"><div data-listing="load"></div></div>
-      </details>
-    </section>
-
-    <!-- ============================ TAB 3: ENERGY FUNCTION ============================ -->
-    <section class="panel" id="tab-energy" role="tabpanel" hidden>
-      <div class="section-head">
-        <div class="eyebrow">Step 1</div>
-        <h1 class="page-title">The energy function E(x)</h1>
-        <p class="lede">The energy function is just a neural network that reads an image and returns one number.
-          It is built from convolutional layers that shrink the image while growing the channel count.</p>
-      </div>
-
-      <div class="split">
-        <div class="card">
-          <h3>The architecture</h3>
-          <div id="arch-diagram"></div>
-          <p class="small muted" style="margin-top:10px">Four stride 2 convolutions take the 32 by 32 image down
-            to 2 by 2, then two dense layers reduce it to a single score. The last layer is linear, so the output
-            can be any real number.</p>
-        </div>
-        <div class="card">
-          <h3>The swish activation</h3>
-          <div class="eqn">
-            <span class="eqn__label">Swish activation</span>
-            <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
-              <mrow><mi>swish</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mi>x</mi><mo>&#183;</mo><mi>&#963;</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo>
-                <mfrac><mi>x</mi><mrow><msup><mi>e</mi><mrow><mo>&#8722;</mo><mi>x</mi></mrow></msup><mo>+</mo><mn>1</mn></mrow></mfrac></mrow>
-            </math>
-          </div>
-          <div class="canvas-frame" style="width:100%"><canvas id="swish-canvas"></canvas><span class="cap">swish is smooth, unlike ReLU</span></div>
-          <p class="small muted" style="margin-top:8px">Smoothness matters because the sampler takes gradients of
-            this network with respect to the input. A kinked function like ReLU gives unstable gradients.</p>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>Try it, score a real digit versus noise</h3>
-        <p class="small muted">The trained energy function should give a real digit a <b>lower</b> energy than
-          random noise. Click to score fresh examples of each.</p>
-        <div style="display:flex; gap:18px; flex-wrap:wrap; align-items:flex-end">
+      <h2 class="sec-title">Try it: score a real digit against noise</h2>
+      <div class="card scorecard">
+        <div class="scorecard__row">
           <div class="canvas-frame"><canvas id="energy-real"></canvas><span class="cap">real digit</span></div>
           <div class="canvas-frame"><canvas id="energy-noise"></canvas><span class="cap">random noise</span></div>
           <div class="metric-tiles" style="flex:1; min-width:220px">
-            <div class="tile"><div class="k">Mean energy, real</div><div class="v" id="e-real">--</div></div>
-            <div class="tile"><div class="k">Mean energy, noise</div><div class="v" id="e-noise">--</div></div>
+            <div class="tile tile--good"><div class="k">Mean energy, real</div><div class="v" id="e-real">--</div></div>
+            <div class="tile tile--bad"><div class="k">Mean energy, noise</div><div class="v" id="e-noise">--</div></div>
           </div>
         </div>
         <div class="btn-row"><button class="btn primary" id="energy-eval">Score new examples</button>
           <span class="small muted" id="energy-verdict"></span></div>
       </div>
+      <div class="trythis"><span class="trythis__tag">Try this</span>
+        <ul class="bullets">
+          <li>Click <b>Score new examples</b> a few times. Real digits should always land lower than noise.</li>
+          <li>The numbers themselves do not matter. Only which one is <b>lower</b>.</li>
+        </ul>
+      </div>
 
-      <div class="code-block" data-listing="energy"></div>
+      <details class="codefold"><summary>Look at the data: real digits and preprocessing</summary>
+        <div class="codefold__body">
+          <div class="split">
+            <div class="card">
+              <h3>Real digits from the dataset</h3>
+              <p class="small muted">1,500 training and 200 test digits.</p>
+              <div id="data-grid" class="sample-grid"></div>
+              <div class="btn-row"><button class="btn" id="data-reshuffle">Show another sample</button></div>
+            </div>
+            <div class="card">
+              <h3>Inspect one digit</h3>
+              <p class="small muted">Hover to read a pixel value in [&minus;1, 1].</p>
+              <div style="display:flex; gap:16px; flex-wrap:wrap; align-items:flex-start">
+                <div class="canvas-frame"><canvas id="data-inspect"></canvas><span class="cap">32 by 32</span></div>
+                <div>
+                  <div class="metric-tiles" style="grid-template-columns:1fr">
+                    <div class="tile"><div class="k">Hovered pixel</div><div class="v" id="px-val">--</div></div>
+                  </div>
+                  <div class="small muted" id="px-hint">Move your mouse over the image.</div>
+                </div>
+              </div>
+              <div class="btn-row"><button class="btn" id="data-next">Next digit</button></div>
+            </div>
+          </div>
+        </div>
+      </details>
+      <details class="codefold"><summary>Why swish? Compare it with ReLU</summary>
+        <div class="codefold__body">
+          <div class="canvas-frame" style="width:100%"><canvas id="swish-canvas"></canvas><span class="cap">swish(x) = x &middot; sigmoid(x), smooth everywhere</span></div>
+        </div>
+      </details>
+
+      <div class="takeaway"><b>Takeaway:</b> the energy function is a normal CNN with one output. Real digits low, noise high.</div>
+      <details class="codefold"><summary>Show the book's code</summary><div class="codefold__body">
+        <div data-listing="load"></div><div data-listing="preprocess"></div><div data-listing="energy"></div></div></details>
     </section>
 
-    <!-- ============================ TAB 4: LANGEVIN ============================ -->
-    <section class="panel" id="tab-langevin" role="tabpanel" hidden>
-      <div class="section-head">
-        <div class="eyebrow">Step 2, sampling</div>
-        <h1 class="page-title">Langevin dynamics, turning noise into a digit</h1>
-        <p class="lede">The energy function only scores an image. To generate one, we start from noise and take many
-          small steps downhill on the energy, adding a little randomness each time.</p>
+    <!-- ============================ 4. LANGEVIN ============================ -->
+    <section class="panel" id="tab-langevin" role="tabpanel" data-color="violet" hidden>
+      <header class="hero">
+        <div class="hero__step">Step 4 of 6</div>
+        <h1 class="hero__title">Langevin sampling: noise into a digit</h1>
+        <p class="hero__sub">The network only scores. To make an image, start from noise and walk downhill on the energy, one small step at a time.</p>
+      </header>
+
+      <div class="keyidea"><span class="keyidea__tag">Key idea</span>
+        <p>Freeze the network. Move the <b>pixels</b> a little downhill, add a little noise, repeat.</p></div>
+
+      <div class="learn">
+        <div class="learn__text">
+          <h2 class="sec-title">What to know</h2>
+          <ul class="bullets">
+            <li>The update: <span class="kbd">x &larr; x &minus; &eta; &nabla;<sub>x</sub>E(x) + noise</span>.</li>
+            <li><span class="kbd">&nabla;<sub>x</sub>E</span> says how each pixel should change to <b>lower</b> the energy.</li>
+            <li>The network weights are <b>frozen</b>. Only the image changes.</li>
+            <li>The noise keeps samples from getting stuck, so you get different digits.</li>
+            <li>Same network as step 3. Langevin is a <b>procedure</b> that uses it, not a second model.</li>
+          </ul>
+        </div>
+        <figure class="viz">
+          <svg viewBox="0 0 460 290" role="img" aria-label="A ball rolling down an energy curve in small noisy steps">
+            <text x="16" y="24" class="v-lab">energy</text>
+            <line x1="40" y1="34" x2="40" y2="246" class="v-axis"/><line x1="40" y1="246" x2="446" y2="246" class="v-axis"/>
+            <path d="M44,48 C150,52 220,230 300,226 C360,224 400,150 444,110" class="v-curve"/>
+            <g class="v-steps">
+              <circle cx="70" cy="50" r="9" class="v-bad"/>
+              <circle cx="118" cy="66" r="7"/><circle cx="160" cy="98" r="7"/><circle cx="196" cy="142" r="7"/><circle cx="230" cy="186" r="7"/><circle cx="262" cy="214" r="7"/>
+              <circle cx="296" cy="226" r="10" class="v-good"/>
+            </g>
+            <g class="v-step-arrows"><path d="M78,52 L110,62"/><path d="M124,72 L154,92"/><path d="M165,106 L190,134"/><path d="M201,150 L224,178"/><path d="M236,192 L256,208"/><path d="M268,218 L286,224"/></g>
+            <text x="84" y="40" class="v-lab v-badtxt">start: noise</text>
+            <text x="270" y="262" class="v-lab v-goodtxt">end: a digit (low E)</text>
+            <text x="190" y="80" class="v-lab">each step: downhill + a little noise</text>
+          </svg>
+          <figcaption>Like a ball rolling into a valley, with a little shaking at every step.</figcaption>
+        </figure>
       </div>
 
-      <div class="eqn">
-        <span class="eqn__label">Langevin dynamics update</span>
-        <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
-          <mrow>
-            <msup><mi>x</mi><mi>k</mi></msup><mo>=</mo>
-            <msup><mi>x</mi><mrow><mi>k</mi><mo>&#8722;</mo><mn>1</mn></mrow></msup>
-            <mo>&#8722;</mo><mi>&#951;</mi><msub><mo>&#8711;</mo><mi>x</mi></msub><mi>E</mi><mo>(</mo><msup><mi>x</mi><mrow><mi>k</mi><mo>&#8722;</mo><mn>1</mn></mrow></msup><mo>)</mo>
-            <mo>+</mo><mi>&#969;</mi>
-          </mrow>
-        </math>
-      </div>
-      <p>Read the update in three parts:</p>
-      <ol class="steps">
-        <li>Start from the current image.</li>
-        <li>Step a small amount <span class="kbd">&eta;</span> in the direction that lowers the energy.</li>
-        <li>Add a pinch of noise <span class="kbd">&omega;</span> so the sampler does not get stuck, then repeat.</li>
-      </ol>
-
+      <h2 class="sec-title">Try it: the live sampler</h2>
       <div class="split">
         <div class="card">
-          <h3>Live sampler</h3>
           <div class="canvas-frame" style="width:100%"><canvas id="lang-canvas"></canvas><span class="cap" id="lang-step">step 0</span></div>
-          <div class="control"><label>Step size <b><span id="lang-ss-v">10</span></b></label><input type="range" id="lang-ss" min="1" max="40" value="10" /></div>
+          <div class="control"><label>Step size &eta; <b><span id="lang-ss-v">10</span></b></label><input type="range" id="lang-ss" min="1" max="40" value="10" /></div>
           <div class="control"><label>Noise <b><span id="lang-noise-v">0.005</span></b></label><input type="range" id="lang-noise" min="0" max="30" value="5" /></div>
-          <div class="control"><label>Total steps <b><span id="lang-steps-v">200</span></b></label><input type="range" id="lang-steps" min="20" max="600" value="200" step="20" /></div>
+          <div class="control"><label>Number of steps <b><span id="lang-steps-v">200</span></b></label><input type="range" id="lang-steps" min="20" max="600" value="200" step="20" /></div>
           <div class="btn-row">
             <button class="btn primary" id="lang-run">Run from noise</button>
             <button class="btn" id="lang-stop" disabled>Stop</button>
           </div>
         </div>
         <div class="card">
-          <h3>What is happening</h3>
-          <p class="small muted">Each step, the sampler computes how the energy would change if each pixel changed a
-            little, then nudges every pixel to lower the energy. The image below records snapshots along the way, the
-            same idea as figure 7-8 in the book.</p>
           <div class="metric-tiles">
-            <div class="tile"><div class="k">Current energy</div><div class="v" id="lang-energy">--</div></div>
+            <div class="tile tile--violet"><div class="k">Current energy</div><div class="v" id="lang-energy">--</div></div>
             <div class="tile"><div class="k">Tensors in memory</div><div class="v" id="lang-mem">--</div></div>
           </div>
-          <h3>Snapshots</h3>
+          <h3>Snapshots along the way</h3>
           <div id="lang-snaps" class="snap-strip"></div>
         </div>
       </div>
-
-      <div class="callout watch">
-        <div class="callout__label">Why the noise matters</div>
-        <p>Turn the noise slider to zero and run again. The sampler becomes a plain gradient descent that can settle into
-          a poor local dip. A little noise lets it escape and explore, which is why this is called <b>stochastic</b>
-          gradient Langevin dynamics.</p>
+      <div class="trythis"><span class="trythis__tag">Try this</span>
+        <ul class="bullets">
+          <li>Run it and watch the <b>energy fall</b> as the digit appears.</li>
+          <li>Set noise to 0. It becomes plain gradient descent and can get stuck.</li>
+          <li>Make the step size very large. The image overshoots and turns messy.</li>
+        </ul>
       </div>
 
-      <div class="code-block" data-listing="langevin"></div>
-    </section>
-
-    <!-- ============================ TAB 5: TRAINING ============================ -->
-    <section class="panel" id="tab-training" role="tabpanel" hidden>
-      <div class="section-head">
-        <div class="eyebrow">Step 3, training</div>
-        <h1 class="page-title">Contrastive divergence, training the energy</h1>
-        <p class="lede">We cannot train by maximum likelihood because of that intractable sum. Instead we contrast real
-          images against fake ones from the sampler, and push their energies apart.</p>
-      </div>
-
+      <h2 class="sec-title">Make many digits at once</h2>
       <div class="split">
         <div class="card">
-          <h3>The loss in one line</h3>
-          <div class="eqn">
-            <span class="eqn__label">Contrastive divergence loss</span>
-            <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
-              <mrow><mi>loss</mi><mo>=</mo><mi>E</mi><mo>(</mo><mi>real</mi><mo>)</mo><mo>&#8722;</mo><mi>E</mi><mo>(</mo><mi>fake</mi><mo>)</mo><mo>+</mo><mi>reg</mi></mrow>
-            </math>
-          </div>
-          <p class="small muted">Minimizing this pushes the energy of real digits <b>down</b> and the energy of the
-            sampler's fakes <b>up</b>. The small regularizer keeps the raw scores from drifting too far. No normalizing
-            sum appears anywhere.</p>
-          <div class="callout intuition" style="margin-top:8px">
-            <div class="callout__label">One step of contrastive divergence</div>
-            <p>Real observations are pressed down into the energy valley, fake observations are lifted up out of it. After
-              many steps the valleys sit exactly where the real data lives.</p>
-          </div>
+          <h3>A gallery</h3>
+          <div class="btn-row"><button class="btn primary" id="an-gen">Generate digits</button>
+            <span class="small muted" id="an-status"></span></div>
+          <div id="an-gallery" class="sample-grid"></div>
         </div>
         <div class="card">
-          <h3>Live training</h3>
-          <p class="small muted">This trains a <b>fresh</b> energy model from scratch, in your browser, on the small
-            subset. Watch the metrics move. Real energy should fall below fake energy.</p>
+          <h3>Replay one digit</h3>
+          <div class="btn-row"><button class="btn" id="an-replay">Replay one digit</button></div>
+          <div id="an-snaps" class="snap-strip"></div>
+        </div>
+      </div>
+
+      <div class="takeaway"><b>Takeaway:</b> training moves the landscape. Sampling moves the ball on the landscape.</div>
+      <details class="codefold"><summary>Show the book's code</summary><div class="codefold__body">
+        <div data-listing="langevin"></div><div data-listing="generate"></div></div></details>
+    </section>
+
+    <!-- ============================ 5. TRAINING ============================ -->
+    <section class="panel" id="tab-training" role="tabpanel" data-color="brand" hidden>
+      <header class="hero">
+        <div class="hero__step">Step 5 of 6</div>
+        <h1 class="hero__title">Training: real energy down, fake energy up</h1>
+        <p class="hero__sub">First the model makes fake images, then we train it to prefer the real ones. That is contrastive divergence.</p>
+      </header>
+
+      <div class="keyidea"><span class="keyidea__tag">Key idea</span>
+        <p><span class="kbd">loss = E(real) &minus; E(fake)</span>. The only way to make it smaller: real energy down, fake energy up.</p></div>
+
+      <h2 class="sec-title">One training step, following a real 7</h2>
+      <div class="steps6">
+        <div class="s6 s6--good"><div class="s6__n">1</div><b>Real images</b><span>A batch from the dataset, like our 7. Never changed.</span></div>
+        <div class="s6 s6--violet"><div class="s6__n">2</div><b>Starting points</b><span>Mostly old fakes from the buffer (95%), a few fresh noise (5%).</span></div>
+        <div class="s6 s6--violet"><div class="s6__n">3</div><b>Roll downhill</b><span>Network frozen. About 60 Langevin steps on the pixels.</span></div>
+        <div class="s6 s6--warn"><div class="s6__n">4</div><b>Score both</b><span>Images frozen. Energy of the real and the fake images.</span></div>
+        <div class="s6 s6--brand"><div class="s6__n">5</div><b>Fix the network</b><span>Update the weights: real down, fake up.</span></div>
+        <div class="s6 s6--violet"><div class="s6__n">6</div><b>Save the fakes</b><span>Back into the buffer, to continue next time.</span></div>
+      </div>
+      <div class="steps6__legend"><span class="lg lg--violet">Steps 2&ndash;3 move the images</span><span class="lg lg--brand">Steps 4&ndash;5 move the weights</span></div>
+
+      <div class="learn">
+        <div class="learn__text">
+          <h2 class="sec-title">What to know</h2>
+          <ul class="bullets">
+            <li><b>Positives</b>: real images. <b>Negatives</b>: what the current model makes with Langevin.</li>
+            <li>Negatives show the model <b>where it is wrong right now</b>: places it rates low that are not real.</li>
+            <li>Short runs are enough. Exact samples would cost thousands of steps per batch.</li>
+            <li>The <b>replay buffer</b> keeps old fakes, so their short runs add up over many batches.</li>
+            <li>No label tells the network which image is real. The <b>minus sign in the loss</b> does that job.</li>
+          </ul>
+        </div>
+        <figure class="viz">
+          <svg viewBox="0 0 460 290" role="img" aria-label="Real data is pushed down, fake samples are pushed up">
+            <text x="16" y="24" class="v-lab">energy</text>
+            <line x1="40" y1="34" x2="40" y2="246" class="v-axis"/><line x1="40" y1="246" x2="446" y2="246" class="v-axis"/>
+            <path d="M44,90 C100,96 120,170 170,170 C220,170 240,120 290,124 C340,128 360,190 444,150" class="v-curve v-curve--faint"/>
+            <path d="M44,80 C100,90 120,214 170,214 C220,214 250,74 300,74 C350,74 370,190 444,150" class="v-curve"/>
+            <circle cx="170" cy="170" r="8" class="v-good"/><text x="122" y="150" class="v-lab v-goodtxt">real 7</text>
+            <line x1="170" y1="182" x2="170" y2="204" class="v-push v-push--down"/>
+            <circle cx="290" cy="124" r="8" class="v-bad"/><text x="304" y="132" class="v-lab v-badtxt">fake</text>
+            <line x1="290" y1="112" x2="290" y2="86" class="v-push v-push--up"/>
+            <text x="60" y="272" class="v-lab">faint: before the update. solid: after.</text>
+          </svg>
+          <figcaption>Each update pushes the <b>real 7 down</b> and the <b>fake up</b>. After many steps, valleys sit on real digits.</figcaption>
+        </figure>
+      </div>
+
+      <h2 class="sec-title">Try it: train a fresh model in your browser</h2>
+      <div class="split">
+        <div class="card">
           <div class="control"><label>Training steps <b><span id="tr-steps-v">120</span></b></label><input type="range" id="tr-steps" min="20" max="400" value="120" step="20" /></div>
           <div class="control"><label>Langevin steps per batch <b><span id="tr-cd-v">30</span></b></label><input type="range" id="tr-cd" min="10" max="60" value="30" step="10" /></div>
           <div class="btn-row">
@@ -382,127 +424,137 @@
             <div class="progress__bar"><div class="progress__fill" id="tr-progress-fill"></div></div>
             <div class="progress__label small muted" id="tr-progress-label">starting ...</div>
           </div>
+        </div>
+        <div class="card">
           <div class="metric-tiles">
-            <div class="tile"><div class="k">Real energy</div><div class="v" id="tr-real">--</div></div>
-            <div class="tile"><div class="k">Fake energy</div><div class="v" id="tr-fake">--</div></div>
-            <div class="tile"><div class="k">Contrast</div><div class="v" id="tr-cdiv">--</div></div>
+            <div class="tile tile--good"><div class="k">Real energy</div><div class="v" id="tr-real">--</div></div>
+            <div class="tile tile--bad"><div class="k">Fake energy</div><div class="v" id="tr-fake">--</div></div>
+            <div class="tile tile--brand"><div class="k">Contrast</div><div class="v" id="tr-cdiv">--</div></div>
           </div>
+          <h3>The buffer: live fakes</h3>
+          <div id="tr-buffer" class="sample-grid"></div>
         </div>
       </div>
-
       <div class="grid cols-3">
         <div class="card"><canvas id="tr-chart-cdiv"></canvas></div>
         <div class="card"><canvas id="tr-chart-real"></canvas></div>
         <div class="card"><canvas id="tr-chart-fake"></canvas></div>
       </div>
-
-      <div class="card">
-        <h3>The buffer, live fakes</h3>
-        <p class="small muted">These are the current fake samples the training loop is contrasting against. Early on they
-          are noise. As training proceeds they should start to look like digits.</p>
-        <div id="tr-buffer" class="sample-grid"></div>
-        <div class="callout intuition" style="margin-bottom:0">
-          <div class="callout__label">What is the replay buffer for?</div>
-          <p>Every training step needs fake samples to push the energy up on. Producing a good fake means running the
-            Langevin sampler for many steps, which is expensive. If we started each fake from pure noise every step, we
-            would waste that work and training would crawl.</p>
-          <p>The replay buffer fixes this. It keeps a pool of the fakes produced so far, and each step it mostly reuses
-            them (with only about 5 percent freshly seeded from noise) and pushes them a few more Langevin steps. So the
-            fakes improve gradually across steps instead of restarting, which makes training much faster and gives a more
-            stable contrast between real and fake. Watch the samples above sharpen from noise into digit shapes as the
-            buffer matures.</p>
-        </div>
+      <div class="trythis"><span class="trythis__tag">Try this</span>
+        <ul class="bullets">
+          <li>Watch <b>real energy</b> drop below <b>fake energy</b>, and the contrast grow.</li>
+          <li>Watch the buffer: noise slowly turns into digit-like shapes.</li>
+          <li>When it finishes, step 4 uses your new model. Reload the page to get the pretrained one back.</li>
+        </ul>
       </div>
 
-      <details class="disclosure"><summary>Show the replay buffer code (Example 7-5)</summary>
-        <div class="disclosure__body"><div data-listing="buffer"></div></div>
-      </details>
-      <div class="code-block" data-listing="train"></div>
+      <div class="takeaway"><b>Takeaway:</b> the model makes fakes it likes, then learns to prefer the real ones. Repeat thousands of times.</div>
+      <details class="codefold"><summary>Show the book's code</summary><div class="codefold__body">
+        <div data-listing="buffer"></div><div data-listing="train"></div></div></details>
     </section>
 
-    <!-- ============================ TAB 6: ANALYSIS ============================ -->
-    <section class="panel" id="tab-analysis" role="tabpanel" hidden>
-      <div class="section-head">
-        <div class="eyebrow">Step 4</div>
-        <h1 class="page-title">Generating and analyzing samples</h1>
-        <p class="lede">With a trained energy function loaded, generating a digit is just running the sampler for many
-          steps from a fresh noise image.</p>
-      </div>
+    <!-- ============================ 6. CLASSIFIER AS EBM ============================ -->
+    <section class="panel" id="tab-classifier" role="tabpanel" data-color="good" hidden>
+      <header class="hero">
+        <div class="hero__step">Step 6 of 6</div>
+        <h1 class="hero__title">Your classifier is secretly an EBM</h1>
+        <p class="hero__sub">The same 10 logits can be read two ways: "which digit?" and "is this a digit at all?"</p>
+      </header>
 
-      <div class="split">
-        <div class="card">
-          <h3>Generate a gallery</h3>
-          <p class="small muted">Runs the sampler for many steps on several noise images at once, using the pretrained
-            checkpoint that loaded with the app.</p>
-          <div class="btn-row"><button class="btn primary" id="an-gen">Generate digits</button>
-            <span class="small muted" id="an-status"></span></div>
-          <div id="an-gallery" class="sample-grid"></div>
-        </div>
-        <div class="card">
-          <h3>Replay a single generation</h3>
-          <p class="small muted">Snapshots of one image across the sampling process, from pure noise to a plausible
-            digit. This mirrors figure 7-8.</p>
-          <div class="btn-row"><button class="btn" id="an-replay">Replay one digit</button></div>
-          <div id="an-snaps" class="snap-strip"></div>
-        </div>
-      </div>
+      <div class="keyidea"><span class="keyidea__tag">Key idea</span>
+        <p>The energy of an image is <b>minus the log of the softmax denominator</b>. A normal classifier throws that number away.</p></div>
 
-      <div class="callout">
-        <div class="callout__label">Reading the training curves</div>
-        <p>In the book, the training loss stays small and roughly flat, because the fakes in the buffer keep improving as
-          fast as the model does, so the contrast between them stays similar. The honest signal of progress is a separate
-          validation contrast between real digits and fresh noise, which should grow as the model learns to tell them apart.</p>
-      </div>
-      <div class="code-block" data-listing="generate"></div>
-    </section>
+      <figure class="viz viz--wide">
+        <svg viewBox="0 0 920 300" role="img" aria-label="Ten logits read two ways: softmax for the label, minus log of the denominator for the energy">
+          <text x="20" y="28" class="v-lab">10 logits from any classifier</text>
+          <g>
+            <rect x="20" y="140" width="22" height="12" class="v-midfill"/><rect x="48" y="146" width="22" height="6" class="v-midfill"/>
+            <rect x="76" y="136" width="22" height="16" class="v-midfill"/><rect x="104" y="141" width="22" height="11" class="v-midfill"/>
+            <rect x="132" y="143" width="22" height="9" class="v-midfill"/><rect x="160" y="139" width="22" height="13" class="v-midfill"/>
+            <rect x="188" y="147" width="22" height="5" class="v-midfill"/><rect x="216" y="52" width="22" height="100" class="v-goodfill"/>
+            <rect x="244" y="130" width="22" height="22" class="v-midfill"/><rect x="272" y="138" width="22" height="14" class="v-midfill"/>
+            <text x="27" y="170" class="v-tick">0</text><text x="55" y="170" class="v-tick">1</text><text x="83" y="170" class="v-tick">2</text><text x="111" y="170" class="v-tick">3</text><text x="139" y="170" class="v-tick">4</text>
+            <text x="167" y="170" class="v-tick">5</text><text x="195" y="170" class="v-tick">6</text><text x="223" y="170" class="v-tick v-goodtxt">7</text><text x="251" y="170" class="v-tick">8</text><text x="279" y="170" class="v-tick">9</text>
+            <text x="212" y="44" class="v-num v-goodtxt">9.0</text>
+          </g>
+          <g class="v-arrow"><path d="M310,110 L370,70"/><path d="M310,120 L370,200"/></g>
+          <rect x="380" y="34" width="520" height="96" rx="12" class="v-card v-card--brand"/>
+          <text x="400" y="62" class="v-h v-brandtxt">Read 1: classifier ("which digit?")</text>
+          <text x="400" y="92" class="v-eq">p(y | x) = e^logit_y  &#247;  <tspan class="v-violettxt">&#931; e^logits</tspan></text>
+          <text x="400" y="118" class="v-lab">our 7: 8,103 &#247; 8,133 = 99.6%, answer 7</text>
+          <rect x="380" y="152" width="520" height="96" rx="12" class="v-card v-card--good"/>
+          <text x="400" y="180" class="v-h v-goodtxt">Read 2: energy ("is it a digit at all?")</text>
+          <text x="400" y="210" class="v-eq">E(x) = &#8722;log( <tspan class="v-violettxt">&#931; e^logits</tspan> )</text>
+          <text x="400" y="236" class="v-lab">our 7: &#8722;log 8,133 &#8776; &#8722;9 (low).  noise &#8776; &#8722;3 (high)</text>
+          <text x="380" y="282" class="v-lab"><tspan class="v-violettxt" font-weight="800">purple</tspan> = the softmax denominator. It sums over 10 labels, so it is cheap. It is not Z.</text>
+        </svg>
+      </figure>
 
-    <!-- ============================ TAB 7: OTHER EBMs ============================ -->
-    <section class="panel" id="tab-other" role="tabpanel" hidden>
-      <div class="section-head">
-        <div class="eyebrow">Context and history</div>
-        <h1 class="page-title">The restricted Boltzmann machine</h1>
-        <p class="lede">The deep EBM we built is a modern member of an old family. The restricted Boltzmann machine
-          (RBM) is one of the earliest energy-based models. It is worth understanding because it makes the energy idea
-          concrete: a few units, some weights, one energy number, and a simple way to sample.</p>
-      </div>
-
-      <h2>The building blocks</h2>
-      <div class="grid cols-3">
-        <div class="card">
-          <h3>Visible units, v</h3>
-          <p>The visible units hold the data you observe. For an MNIST image, each visible unit is one pixel, usually
-            binary: <b>0</b> for a dark or inactive pixel, <b>1</b> for a bright or active pixel.</p>
-          <p class="small muted">v<sub>1</sub>, v<sub>2</sub>, ... v<sub>1024</sub> for a 32 by 32 image. They are
-            called visible because their values come straight from the data.</p>
-        </div>
-        <div class="card">
-          <h3>Hidden units, h</h3>
-          <p>The hidden units are not given by the data. They learn patterns in the visible pixels, for example a
-            vertical line, a curve, a loop, or the top of a digit: combinations of pixels that often occur together.</p>
-          <p class="small muted">h<sub>1</sub>, h<sub>2</sub>, ... Traditionally the hidden units are also binary,
-            on or off.</p>
-        </div>
-        <div class="card">
-          <h3>Learned weights, w<sub>ij</sub></h3>
-          <p>Every visible unit connects to every hidden unit through a learned weight that says how compatible the two
-            units are.</p>
-          <ul class="clean small">
-            <li>Large positive weight: the two like to be active together.</li>
-            <li>Large negative weight: they discourage each other.</li>
-            <li>Near zero: little relationship.</li>
+      <div class="learn learn--single">
+        <div class="learn__text">
+          <h2 class="sec-title">What to know</h2>
+          <ul class="bullets">
+            <li>The energy of a pair is just <span class="kbd">E(x, y) = &minus;logit<sub>y</sub></span>. High logit, low energy.</li>
+            <li>Softmax over those energies <b>is</b> the Boltzmann distribution over the 10 labels.</li>
+            <li>At test time this is <b>just a normal classifier</b>, read as energies. Same answer, same cost.</li>
+            <li>Softmax only sees which logit is biggest. The energy sees how big they are <b>overall</b>.</li>
+            <li>Normal training never teaches that overall level. <b>JEM</b> (Grathwohl et al., 2020) adds the energy loss from step 5 so it means something.</li>
           </ul>
-          <p class="small muted">The model also learns a bias for every visible and hidden unit.</p>
         </div>
       </div>
 
-      <h2>What does "restricted" mean?</h2>
-      <p>A full Boltzmann machine allows every kind of connection: visible to visible, hidden to hidden, and visible to
-        hidden. That creates many tangled dependencies and makes sampling slow. A restricted Boltzmann machine keeps
-        only the visible to hidden connections and removes the two within-layer kinds.</p>
-      <div class="split">
-        <div class="card">
-          <h3>Full Boltzmann machine</h3>
-          <svg viewBox="0 0 280 172" style="width:100%;max-width:320px;height:auto;display:block;margin:6px auto" role="img" aria-label="Full Boltzmann machine with connections everywhere">
+      <h2 class="sec-title">Try it with a real classifier</h2>
+      <div class="card scorecard">
+        <p class="small muted">A plain digit classifier (98% accuracy, no energy training). We read its logits as an energy, averaged over many digits and many noise images.</p>
+        <div class="scorecard__row">
+          <div class="canvas-frame"><canvas id="jem-real"></canvas><span class="cap" id="jem-real-cap">real digit</span></div>
+          <div class="canvas-frame"><canvas id="jem-noise"></canvas><span class="cap">random noise</span></div>
+          <div class="metric-tiles" style="flex:1; min-width:200px">
+            <div class="tile tile--good"><div class="k">Mean energy, real</div><div class="v" id="jem-e-real">--</div></div>
+            <div class="tile tile--bad"><div class="k">Mean energy, noise</div><div class="v" id="jem-e-noise">--</div></div>
+            <div class="tile tile--brand"><div class="k">Predicted label</div><div class="v" id="jem-pred">--</div></div>
+          </div>
+        </div>
+        <div class="btn-row"><button class="btn primary" id="jem-eval">Score new examples</button>
+          <span class="small muted" id="jem-verdict"></span></div>
+      </div>
+      <div class="trythis"><span class="trythis__tag">Try this</span>
+        <ul class="bullets">
+          <li>Real digits should get lower energy than noise on average.</li>
+          <li>The gap is smaller than in step 3: this classifier was never trained to make its energy meaningful. That is what JEM fixes.</li>
+        </ul>
+      </div>
+
+      <div class="takeaway"><b>Takeaway:</b> no new architecture. One network, read two ways: a classifier and an energy model.</div>
+      <details class="codefold"><summary>Show the code</summary><div class="codefold__body"><div data-listing="jem"></div></div></details>
+      <div class="finish">
+        <h2>You made it through all six steps</h2>
+        <p>Want more? The <b>Extras</b> tab has the classic restricted Boltzmann machine and all of the code in one place.</p>
+        <button class="btn" data-goto="extras">Open Extras</button>
+      </div>
+    </section>
+
+    <!-- ============================ EXTRAS ============================ -->
+    <section class="panel" id="tab-extras" role="tabpanel" data-color="ink" hidden>
+      <header class="hero">
+        <div class="hero__step">Extras</div>
+        <h1 class="hero__title">History and the full code</h1>
+        <p class="hero__sub">The classic restricted Boltzmann machine, and every piece of code behind this lab.</p>
+      </header>
+
+      <h2 class="sec-title">The restricted Boltzmann machine (RBM)</h2>
+      <div class="learn">
+        <div class="learn__text">
+          <ul class="bullets">
+            <li>One of the earliest EBMs (Hinton and colleagues, 1980s). The deep EBM is its modern relative.</li>
+            <li><b>Visible units v</b>: the pixels. <b>Hidden units h</b>: learned pattern detectors (strokes, curves).</li>
+            <li><b>Restricted</b>: links only between the two layers, never inside a layer.</li>
+            <li>Energy: <span class="kbd">E(v, h) = &minus;(v&#7488;Wh + a&#7488;v + b&#7488;h)</span>. Low energy, likely.</li>
+            <li>Sampling: <b>Gibbs</b>, alternating v &rarr; h &rarr; v &rarr; h, one whole layer at a time.</li>
+          </ul>
+        </div>
+        <div class="rbm-pair">
+          <div class="card"><h3>Full Boltzmann machine</h3><svg viewBox="0 0 280 172" style="width:100%;max-width:320px;height:auto;display:block;margin:6px auto" role="img" aria-label="Full Boltzmann machine with connections everywhere">
             <g style="stroke:var(--line-2);stroke-width:1.3;fill:none;opacity:.65">
               <line x1="60" y1="32" x2="140" y2="32"/><line x1="140" y1="32" x2="220" y2="32"/>
               <path d="M60,32 Q140,4 220,32"/>
@@ -519,13 +571,8 @@
             <g style="fill:var(--ink-3);font:700 12px system-ui,sans-serif">
               <text x="4" y="36">v</text><text x="4" y="144">h</text>
             </g>
-          </svg>
-          <p class="small muted">Connections everywhere, including within each layer. Powerful, but the tangled
-            dependencies make it very slow to train and sample.</p>
-        </div>
-        <div class="card">
-          <h3>Restricted (RBM)</h3>
-          <svg viewBox="0 0 280 172" style="width:100%;max-width:320px;height:auto;display:block;margin:6px auto" role="img" aria-label="Restricted Boltzmann machine, a bipartite graph">
+          </svg><p class="small muted">Links everywhere. Slow to sample.</p></div>
+          <div class="card"><h3>Restricted (RBM)</h3><svg viewBox="0 0 280 172" style="width:100%;max-width:320px;height:auto;display:block;margin:6px auto" role="img" aria-label="Restricted Boltzmann machine, a bipartite graph">
             <g style="stroke:var(--brand);stroke-width:1.3;fill:none;opacity:.4">
               <line x1="40" y1="32" x2="74" y2="140"/><line x1="40" y1="32" x2="140" y2="140"/><line x1="40" y1="32" x2="206" y2="140"/>
               <line x1="107" y1="32" x2="74" y2="140"/><line x1="107" y1="32" x2="140" y2="140"/><line x1="107" y1="32" x2="206" y2="140"/>
@@ -539,262 +586,42 @@
             <g style="fill:var(--ink-3);font:700 12px system-ui,sans-serif">
               <text x="4" y="36">v</text><text x="4" y="144">h</text>
             </g>
-          </svg>
-          <p class="small muted">Only visible to hidden connections remain. This two-layer structure with no
-            within-layer links is called a bipartite graph.</p>
-        </div>
-      </div>
-      <div class="callout intuition">
-        <div class="callout__label">Bipartite means two groups</div>
-        <p>Connections are allowed only between the visible group and the hidden group, never inside a group. Visible to
-          hidden is allowed. Visible to visible and hidden to hidden are not. That single restriction is what makes the
-          RBM fast to sample.</p>
-      </div>
-
-      <h2>The energy of a configuration</h2>
-      <p>Every energy-based model assigns one energy number to a configuration, and low energy means likely.</p>
-      <div class="split">
-        <div class="card">
-          <h3>General Boltzmann machine</h3>
-          <div class="eqn">
-            <span class="eqn__label">Boltzmann machine energy</span>
-            <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
-              <mrow><mi>E</mi><mo>(</mo><mi>v</mi><mo>,</mo><mi>h</mi><mo>)</mo><mo>=</mo><mo>&#8722;</mo>
-                <mfrac><mn>1</mn><mn>2</mn></mfrac>
-                <mo>(</mo><msup><mi>v</mi><mi>T</mi></msup><mi>L</mi><mi>v</mi><mo>+</mo>
-                <msup><mi>h</mi><mi>T</mi></msup><mi>J</mi><mi>h</mi><mo>+</mo>
-                <msup><mi>v</mi><mi>T</mi></msup><mi>W</mi><mi>h</mi><mo>)</mo></mrow>
-            </math>
-          </div>
-          <p class="small">Three interaction terms:</p>
-          <ul class="clean small">
-            <li><span class="kbd">v&#7488;Lv</span>: visible to visible interactions (matrix L).</li>
-            <li><span class="kbd">h&#7488;Jh</span>: hidden to hidden interactions (matrix J).</li>
-            <li><span class="kbd">v&#7488;Wh</span>: visible to hidden coupling (matrix W).</li>
-          </ul>
-        </div>
-        <div class="card">
-          <h3>The RBM energy</h3>
-          <div class="eqn">
-            <span class="eqn__label">Restricted Boltzmann machine energy</span>
-            <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
-              <mrow><mi>E</mi><mo>(</mo><mi>v</mi><mo>,</mo><mi>h</mi><mo>)</mo><mo>=</mo><mo>&#8722;</mo><mo>(</mo>
-                <msup><mi>v</mi><mi>T</mi></msup><mi>W</mi><mi>h</mi><mo>+</mo>
-                <msup><mi>a</mi><mi>T</mi></msup><mi>v</mi><mo>+</mo>
-                <msup><mi>b</mi><mi>T</mi></msup><mi>h</mi><mo>)</mo></mrow>
-            </math>
-          </div>
-          <p class="small muted">Because an RBM has no within-layer connections, the <span class="kbd">L</span> and
-            <span class="kbd">J</span> terms vanish. Only the visible to hidden coupling <span class="kbd">W</span> and
-            the biases <span class="kbd">a</span> and <span class="kbd">b</span> remain. This is the exact energy the
-            live demo below uses.</p>
+          </svg><p class="small muted">Only visible to hidden. Fast to sample.</p></div>
         </div>
       </div>
 
-      <h2>Sampling by alternating updates</h2>
-      <div class="callout intuition">
-        <div class="callout__label">What is Gibbs sampling?</div>
-        <p>Gibbs sampling is the procedure an RBM uses to move back and forth between the visible layer and the hidden
-          layer. Starting from the current image it samples the hidden units, then from those hidden units it samples a
-          fresh image, then the hidden units again, and so on. Each back and forth pass is one Gibbs step, and repeating
-          it gradually turns a rough or partial image into a clean, plausible one.</p>
-      </div>
-      <div class="split">
-        <div class="card">
-          <h3>Why alternation works</h3>
-          <p>Because there are no connections between hidden units, once the visible units are known, every hidden unit
-            can be computed independently. And because there are no connections between visible units, once the hidden
-            units are known, every visible unit can be computed independently.</p>
-          <p>So the model updates a whole layer at a time, alternating back and forth:</p>
-          <div class="eqn" style="font:700 1.1rem var(--font-mono);letter-spacing:.05em">v &rarr; h &rarr; v &rarr; h &rarr; v</div>
-          <p class="small muted">Each unit turns on with a probability given by a sigmoid of its inputs:</p>
-          <div class="eqn">
-            <span class="eqn__label">Hidden unit activation, given the image</span>
-            <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
-              <mrow><mi>p</mi><mo>(</mo><msub><mi>h</mi><mi>j</mi></msub><mo>=</mo><mn>1</mn><mo>&#8739;</mo><mi>v</mi><mo>)</mo><mo>=</mo>
-                <mi>&#963;</mi><mo>(</mo><msub><mi>b</mi><mi>j</mi></msub><mo>+</mo>
-                <munder><mo>&#8721;</mo><mi>i</mi></munder><msub><mi>v</mi><mi>i</mi></msub><msub><mi>w</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>)</mo></mrow>
-            </math>
-          </div>
-          <div class="eqn">
-            <span class="eqn__label">Visible unit activation, given the hidden units</span>
-            <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
-              <mrow><mi>p</mi><mo>(</mo><msub><mi>v</mi><mi>i</mi></msub><mo>=</mo><mn>1</mn><mo>&#8739;</mo><mi>h</mi><mo>)</mo><mo>=</mo>
-                <mi>&#963;</mi><mo>(</mo><msub><mi>a</mi><mi>i</mi></msub><mo>+</mo>
-                <munder><mo>&#8721;</mo><mi>j</mi></munder><msub><mi>w</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>h</mi><mi>j</mi></msub><mo>)</mo></mrow>
-            </math>
-          </div>
-          <p class="small muted">This back and forth is Gibbs sampling. Each pass moves the network toward a
-            configuration that fits its learned energy. For MNIST, visible pixels drive hidden stroke and curve
-            detectors, which in turn regenerate likely pixels, reconstructing a digit.</p>
-        </div>
-        <div class="card">
-          <h3>Live restricted Boltzmann machine</h3>
-          <p class="small muted">This tiny RBM is trained on the digits in your browser. It starts from a real digit,
-            hides the bottom half, then runs Gibbs sampling to fill it back in, one visible-and-hidden pass at a time.</p>
-          <div style="display:flex; gap:16px; flex-wrap:wrap; align-items:flex-start">
-            <div class="canvas-frame"><canvas id="rbm-canvas"></canvas><span class="cap" id="rbm-step">Gibbs step 0</span></div>
-            <div>
-              <div class="btn-row" style="flex-direction:column; align-items:stretch">
-                <button class="btn primary" id="rbm-train">Train the RBM</button>
-                <button class="btn" id="rbm-gibbs" disabled>Run Gibbs sampling</button>
-              </div>
-              <div class="small muted" id="rbm-note" style="margin-top:8px">Train first, it takes a few seconds.</div>
-            </div>
-          </div>
-          <div class="callout watch" style="margin-top:14px">
-            <div class="callout__label">Watch the mixing speed</div>
-            <p>Notice how many alternating steps the reconstruction needs. This slow mixing is exactly why deep EBMs
-              prefer Langevin dynamics, which follows input gradients instead of alternating layer updates.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="callout">
-        <div class="callout__label">Where this leads</div>
-        <p>Langevin sampling of deep EBMs led to a training idea called score matching, which in turn grew into denoising
-          diffusion models, the engine behind modern image generators. The energy view is a thread that runs from the
-          1985 Boltzmann machine all the way to today's diffusion models.</p>
-      </div>
-    </section>
-
-    <!-- ============================ TAB 8: JEM ============================ -->
-    <section class="panel" id="tab-jem" role="tabpanel" hidden>
-      <div class="section-head">
-        <div class="eyebrow">A surprising connection</div>
-        <h1 class="page-title">Your classifier is secretly an EBM</h1>
-        <p class="lede">Energy-based models are not only for generation. A plain image classifier, trained only to label
-          digits, already contains an energy over its inputs. Here is the one line that reveals it.</p>
-      </div>
-
-      <div class="split">
-        <div class="card">
-          <h3>From logits to energy</h3>
-          <p>A classifier outputs ten logits <span class="kbd">f(x)</span>. The softmax of those logits is the usual class
-            probability. But the same logits also define an energy over the input:</p>
-          <div class="eqn">
-            <span class="eqn__label">Energy from classifier logits</span>
-            <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
-              <mrow><mi>E</mi><mo>(</mo><mi>x</mi><mo>)</mo><mo>=</mo><mo>&#8722;</mo><mi>log</mi>
-                <munder><mo>&#8721;</mo><mi>y</mi></munder>
-                <msup><mi>e</mi><mrow><msub><mi>f</mi><mi>y</mi></msub><mo>(</mo><mi>x</mi><mo>)</mo></mrow></msup></mrow>
-            </math>
-          </div>
-          <p class="small muted">This is the negative log sum exp of the logits. If the network is confident that an input
-            looks like some digit, the energy is low. If no class fits, the energy is high. So a discriminative model is an
-            energy-based model in disguise.</p>
-        </div>
-        <div class="card">
-          <h3>Try it with a real classifier</h3>
-          <p class="small muted">We trained an ordinary digit classifier (no energy tricks) to 98 percent accuracy. Now we read
-            its logits as an energy and compare real digits against random noise, averaged over many samples of each. Real
-            digits sit at clearly lower energy. We average because a plain classifier can be overconfident on a single noise
-            image, which is exactly the calibration issue that energy aware training later fixes.</p>
-          <div style="display:flex; gap:18px; flex-wrap:wrap; align-items:flex-end">
-            <div class="canvas-frame"><canvas id="jem-real"></canvas><span class="cap" id="jem-real-cap">real digit</span></div>
-            <div class="canvas-frame"><canvas id="jem-noise"></canvas><span class="cap">random noise</span></div>
-            <div class="metric-tiles" style="flex:1; min-width:200px">
-              <div class="tile"><div class="k">Mean energy, real</div><div class="v" id="jem-e-real">--</div></div>
-              <div class="tile"><div class="k">Mean energy, noise</div><div class="v" id="jem-e-noise">--</div></div>
-              <div class="tile"><div class="k">Predicted label</div><div class="v" id="jem-pred">--</div></div>
-            </div>
-          </div>
-          <div class="btn-row"><button class="btn primary" id="jem-eval">Score new examples</button>
-            <span class="small muted" id="jem-verdict"></span></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>Worked example: from logits to one energy number</h3>
-        <p class="small muted">Let us follow the exact arithmetic on a single image. Suppose the classifier looks at
-          an image and outputs these ten logits <span class="kbd">f(x)</span>:</p>
-        <div style="display:flex; gap:8px; flex-wrap:wrap; margin:12px 0 4px">
-          <span class="lchip"><span class="d">digit 0</span><b>1</b></span>
-          <span class="lchip"><span class="d">digit 1</span><b>2</b></span>
-          <span class="lchip win"><span class="d">digit 2</span><b>8</b></span>
-          <span class="lchip"><span class="d">digits 3 to 9</span><b>0</b></span>
-        </div>
-
-        <div class="grid cols-2" style="margin-top:8px">
+      <div class="card scorecard">
+        <h3>Live RBM: fill in the missing half of a digit</h3>
+        <p class="small muted">A tiny RBM trains in your browser, hides the bottom half of a real digit, then runs Gibbs sampling to fill it back in.</p>
+        <div class="scorecard__row">
+          <div class="canvas-frame"><canvas id="rbm-canvas"></canvas><span class="cap" id="rbm-step">Gibbs step 0</span></div>
           <div>
-            <h4 style="margin:6px 0 4px">Computing the energy, E(x) = &#8722;log&#8721;e<sup>f(x)</sup></h4>
-            <div class="annot"><span class="badge">1</span><p><b>Exponentiate every logit.</b>
-              e<sup>1</sup> &asymp; 2.72, e<sup>2</sup> &asymp; 7.39, e<sup>8</sup> &asymp; 2980.96, e<sup>0</sup> = 1.
-              The seven digits with logit 0 contribute 7 &times; 1 = 7.</p></div>
-            <div class="annot"><span class="badge">2</span><p><b>Add them together</b> (this is the sum-exp part):
-              2.72 + 7.39 + 2980.96 + 7 &asymp; <b>2998.07</b>.</p></div>
-            <div class="annot"><span class="badge">3</span><p><b>Take the logarithm:</b>
-              log(2998.07) &asymp; <b>8.006</b>. Notice it lands very close to the largest logit, 8. That is why
-              log-sum-exp is called a smooth maximum.</p></div>
-            <div class="annot"><span class="badge">4</span><p><b>Add the negative sign:</b>
-              E(x) &asymp; <b>-8.006</b>. One very strong logit gives this image a low energy, so the classifier
-              finds it very plausible.</p></div>
-          </div>
-          <div>
-            <h4 style="margin:6px 0 4px">The same logits as softmax probabilities</h4>
-            <p class="small muted">Divide each exponentiated logit by the sum 2998.07:</p>
-            <div class="metric-tiles" style="grid-template-columns:1fr 1fr">
-              <div class="tile"><div class="k">Digit 2</div><div class="v">99.43%</div></div>
-              <div class="tile"><div class="k">Digit 1</div><div class="v">0.25%</div></div>
-              <div class="tile"><div class="k">Digit 0</div><div class="v">0.09%</div></div>
-              <div class="tile"><div class="k">Each of 3 to 9</div><div class="v">0.03%</div></div>
+            <div class="btn-row" style="flex-direction:column; align-items:stretch">
+              <button class="btn primary" id="rbm-train">Train the RBM</button>
+              <button class="btn" id="rbm-gibbs" disabled>Run Gibbs sampling</button>
             </div>
-            <p class="small muted" style="margin-top:10px">So the same numbers give two readings:</p>
-            <ul class="clean small">
-              <li><b>Softmax</b> asks which digit is most likely. Answer: digit 2.</li>
-              <li><b>Energy</b> asks how strong the total evidence is for this image. Answer: very strong, so the
-                energy is low (about -8).</li>
-            </ul>
+            <div class="small muted" id="rbm-note" style="margin-top:8px">Train first, it takes a few seconds.</div>
           </div>
         </div>
-
-        <div class="callout intuition" style="margin-bottom:0">
-          <div class="callout__label">The takeaway</div>
-          <p>The energy is not based only on the winning class, it uses every logit. But because logit 8 dominates the
-            others, the log-sum-exp ends up very close to 8, and the energy ends up very close to -8. A confident
-            classifier assigns low energy, an uncertain one assigns high energy.</p>
-        </div>
+      </div>
+      <div class="trythis"><span class="trythis__tag">Try this</span>
+        <ul class="bullets">
+          <li>Count how many Gibbs steps it needs. That slow mixing is why deep EBMs use Langevin instead.</li>
+        </ul>
       </div>
 
-      <div class="code-block" data-listing="jem"></div>
-      <div class="callout">
-        <div class="callout__label">Why this is useful</div>
-        <p>Because the classifier carries an energy, you can use it to detect inputs that do not look like any training
-          digit (they get high energy), and in principle even generate digits with the same Langevin sampler you used on
-          the deep EBM. One network, two readings, discriminative and generative.</p>
-      </div>
-    </section>
-
-    <!-- ============================ TAB 9: APPENDIX ============================ -->
-    <section class="panel" id="tab-appendix" role="tabpanel" hidden>
-      <div class="section-head">
-        <div class="eyebrow">Reference</div>
-        <h1 class="page-title">The full code, annotated</h1>
-        <p class="lede">Every piece of code in one place: first the book's Keras listings, then the exact Python script
-          that pretrained the checkpoints this app loads on startup, and finally the TensorFlow.js code that the
-          Training tab runs to train a model from scratch in your browser.</p>
-      </div>
-
-      <h2>1. The book's program (Keras)</h2>
-      <p class="small muted">The chapter's listings, Examples 7-1 through 7-7, with the same annotations used across the
-        tabs.</p>
-      <div id="appendix-all"></div>
-
-      <h2>2. The script that pretrained the checkpoints (Python)</h2>
-      <p class="small muted">This is the full <span class="kbd">build/train_checkpoints.py</span>. Running it trains the
-        deep energy model with contrastive divergence and the small classifier, then exports the weight files that the
-        app downloads on startup (the "checkpoint loaded" badge). It is what produced the pretrained results you see in
-        the Langevin sampling, Generate, and Classifier tabs.</p>
-      <div id="appendix-pretrain"><p class="small muted">Loading source ...</p></div>
-
-      <h2>3. Training from scratch in your browser (TensorFlow.js)</h2>
-      <p class="small muted">This is <span class="kbd">assets/js/ebm-core.js</span>, the live port of the same
-        algorithm. When you click Train from scratch on the Training tab, the app builds a fresh, randomly initialized
-        model and runs this exact code, the Langevin sampler, the replay buffer, and the contrastive divergence step,
-        right in your browser.</p>
-      <div id="appendix-scratch"><p class="small muted">Loading source ...</p></div>
+      <h2 class="sec-title">All the code</h2>
+      <details class="codefold"><summary>1. The book's program (Keras), Examples 7-1 to 7-7</summary>
+        <div class="codefold__body"><div id="appendix-all"></div></div></details>
+      <details class="codefold"><summary>2. The script that pretrained the checkpoints (Python)</summary>
+        <div class="codefold__body"><p class="small muted"><span class="kbd">build/train_checkpoints.py</span> trained the deep EBM and the classifier that load when the page opens.</p>
+          <div id="appendix-pretrain"><p class="small muted">Loading source ...</p></div></div></details>
+      <details class="codefold"><summary>3. Training from scratch in your browser (TensorFlow.js)</summary>
+        <div class="codefold__body"><p class="small muted"><span class="kbd">assets/js/ebm-core.js</span> runs when you click Train from scratch in step 5.</p>
+          <div id="appendix-scratch"><p class="small muted">Loading source ...</p></div></div></details>
     </section>
   </main>
+
 
   <footer class="app-footer">
     <div class="app-footer__inner">

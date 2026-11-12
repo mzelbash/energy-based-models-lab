@@ -16,17 +16,20 @@ import { RBM, visibleToImage } from './rbm.js';
 const tf = window.tf;
 
 const TABS = [
-  { id: 'start', label: 'Start here' },
-  { id: 'intuition', label: 'Intuition' },
-  { id: 'data', label: 'The data' },
-  { id: 'energy', label: 'Energy function' },
+  { id: 'idea', label: 'The idea' },
+  { id: 'boltzmann', label: 'Energy to probability' },
+  { id: 'network', label: 'The energy network' },
   { id: 'langevin', label: 'Langevin sampling' },
   { id: 'training', label: 'Training' },
-  { id: 'analysis', label: 'Generate & analyze' },
-  { id: 'other', label: 'Other EBMs' },
-  { id: 'jem', label: 'Classifier as EBM' },
-  { id: 'appendix', label: 'Code appendix' },
+  { id: 'classifier', label: 'Classifier as EBM' },
+  { id: 'extras', label: 'Extras', extra: true },
 ];
+
+// Old tab names, so links shared before the redesign still land in the right place.
+const OLD_TABS = {
+  start: 'idea', intuition: 'boltzmann', data: 'network', energy: 'network',
+  analysis: 'langevin', other: 'extras', jem: 'classifier', appendix: 'extras',
+};
 
 const state = {
   ebm: null,
@@ -51,8 +54,17 @@ async function boot() {
   loadEverything();
 
   // deep link support and initial tab
-  const hash = location.hash.replace('#', '');
-  showTab(TABS.some((t) => t.id === hash) ? hash : 'start');
+  let hash = location.hash.replace('#', '');
+  if (OLD_TABS[hash]) hash = OLD_TABS[hash];
+  showTab(TABS.some((t) => t.id === hash) ? hash : 'idea');
+  addStepNav();
+  document.addEventListener('keydown', (ev) => {
+    const tag = (ev.target && ev.target.tagName) || '';
+    if (/INPUT|TEXTAREA|SELECT/.test(tag)) return;
+    const i = TABS.findIndex((t) => t.id === currentTab);
+    if (ev.key === 'ArrowRight' && i < TABS.length - 1) showTab(TABS[i + 1].id);
+    if (ev.key === 'ArrowLeft' && i > 0) showTab(TABS[i - 1].id);
+  });
 
   document.querySelectorAll('[data-goto]').forEach((b) =>
     b.addEventListener('click', () => showTab(b.dataset.goto))
@@ -109,7 +121,7 @@ function setStatus(text, on) {
 // ---------------------------------------------------------------------------
 // Tabs
 // ---------------------------------------------------------------------------
-let currentTab = 'start';
+let currentTab = 'idea';
 
 function buildTabs() {
   const bar = document.getElementById('tabbar');
@@ -118,7 +130,8 @@ function buildTabs() {
     b.className = 'tab-btn';
     b.setAttribute('role', 'tab');
     b.dataset.tab = t.id;
-    b.innerHTML = `<span class="tab-btn__num">${i + 1}</span>${t.label}`;
+    if (t.extra) b.classList.add('tab-btn--extra');
+    b.innerHTML = t.extra ? `<span class="tab-btn__num">+</span>${t.label}` : `<span class="tab-btn__num">${i + 1}</span>${t.label}`;
     b.addEventListener('click', () => showTab(t.id));
     bar.appendChild(b);
   });
@@ -134,14 +147,39 @@ function showTab(id) {
   document.querySelectorAll('.tab-btn').forEach((b) =>
     b.setAttribute('aria-selected', String(b.dataset.tab === id))
   );
+  const idx = TABS.findIndex((t) => t.id === id);
+  const main = TABS.filter((t) => !t.extra).length;
+  const fill = document.getElementById('tab-progress');
+  if (fill) fill.style.width = Math.min(100, ((idx + 1) / main) * 100) + '%';
+  const btn = document.querySelector(`.tab-btn[data-tab="${id}"]`);
+  if (btn && btn.scrollIntoView) btn.scrollIntoView({ block: 'nearest', inline: 'center' });
   window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
   reinit(id);
 }
 
+// Back and Next buttons at the bottom of every tab.
+function addStepNav() {
+  TABS.forEach((t, i) => {
+    const panel = document.getElementById('tab-' + t.id);
+    if (!panel) return;
+    const nav = document.createElement('nav');
+    nav.className = 'stepnav';
+    const prev = TABS[i - 1];
+    const next = TABS[i + 1];
+    nav.innerHTML =
+      (prev ? `<button class="stepnav__btn" data-goto="${prev.id}"><span class="stepnav__dir">&larr; Back</span><span class="stepnav__name">${prev.label}</span></button>` : '<span></span>') +
+      (next ? `<button class="stepnav__btn stepnav__btn--next" data-goto="${next.id}"><span class="stepnav__dir">Next &rarr;</span><span class="stepnav__name">${next.label}</span></button>` : '<span></span>');
+    panel.appendChild(nav);
+  });
+  document.querySelectorAll('.stepnav [data-goto]').forEach((b) =>
+    b.addEventListener('click', () => showTab(b.dataset.goto))
+  );
+}
+
 // lazy init, safe to call repeatedly
 function reinit(id) {
-  const fn = INIT[id];
-  if (fn) fn();
+  const fns = [].concat(INIT[id] || []);
+  fns.forEach((fn) => fn());
 }
 
 // ---------------------------------------------------------------------------
@@ -300,6 +338,9 @@ function initEnergy() {
 
   drawSwish();
   window.addEventListener('themechange', drawSwish);
+  // The swish plot sits in a collapsible section, so redraw it at full width when opened.
+  const fold = document.getElementById('swish-canvas')?.closest('details');
+  if (fold) fold.addEventListener('toggle', () => { if (fold.open) drawSwish(); });
 
   document.getElementById('energy-eval').onclick = scoreExamples;
   scoreExamples();
@@ -683,14 +724,12 @@ function bindSlider(id, labelId, fmt = (v) => v) {
 }
 
 const INIT = {
-  intuition: initIntuition,
-  data: initData,
-  energy: initEnergy,
-  langevin: initLangevin,
+  boltzmann: initIntuition,
+  network: [initData, initEnergy],
+  langevin: [initLangevin, initAnalysis],
   training: initTraining,
-  analysis: initAnalysis,
-  other: initOther,
-  jem: initJem,
+  classifier: initJem,
+  extras: initOther,
 };
 
 boot();

@@ -42,12 +42,16 @@ export function drawGrid(container, batch, { cols = 8, scale = 3, max = 64 } = {
   const [, h, w] = batch.shape;
   const stride = h * w;
   container.style.display = 'grid';
-  container.style.gridTemplateColumns = `repeat(${cols}, max-content)`;
+  container.style.gridTemplateColumns = `repeat(${cols}, minmax(0, max-content))`;
   container.style.gap = '4px';
   for (let i = 0; i < n; i++) {
     const cv = document.createElement('canvas');
     drawImage(cv, data.subarray(i * stride, (i + 1) * stride), w, h, scale);
     cv.style.borderRadius = '4px';
+    cv.style.width = '100%';
+    cv.style.maxWidth = cv.width + 'px';
+    cv.style.height = 'auto';
+    cv.style.imageRendering = 'pixelated';
     container.appendChild(cv);
   }
 }
