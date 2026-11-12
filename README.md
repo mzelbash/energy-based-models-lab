@@ -12,18 +12,20 @@ Created by Mohamed Elbasheer. Free and open source under the MIT License.
 ## What is inside
 
 A student who has never heard of an energy-based model should understand it after using this
-app. Ten tabs walk through the whole pipeline:
+app. Six steps walk through the whole idea, each one a single page with the same layout: a big
+title, one key idea, a few bullet points next to a picture, a live demo, and a one line
+takeaway. The book's code sits in a collapsible section at the bottom of each step.
 
-1. Start here, what an EBM is and why it matters (an EBM is a framework, not one model)
-2. Intuition, the Boltzmann distribution (interactive)
-3. The data, MNIST preprocessing (interactive inspector)
-4. The energy function E(x), architecture and swish (live scoring)
-5. Langevin sampling, noise into a digit (live animated sampler)
-6. Training, contrastive divergence (live training from scratch)
-7. Generate and analyze, a gallery and a single generation replay
-8. Other EBMs, a live restricted Boltzmann machine with Gibbs sampling
-9. Classifier as EBM, a normal classifier read as an energy
-10. Code appendix, every listing in one place
+1. The idea: an energy is a score (low means "looks real", high means "does not")
+2. From energy to probability: the Boltzmann distribution (interactive)
+3. The energy network E(x): the CNN, the data, and live scoring of real digits against noise
+4. Langevin sampling: noise into a digit (live sampler, gallery and replay)
+5. Training: contrastive divergence, one step at a time, then live training from scratch
+6. Your classifier is secretly an EBM: the softmax denominator read as an energy
+
+An **Extras** tab holds the classic restricted Boltzmann machine (live Gibbs sampling) and
+all of the code in one place. Use the Back and Next buttons at the bottom of each step, or the
+left and right arrow keys, to move through the lab.
 
 ## The models: pretrained checkpoints and in-browser training
 
@@ -34,13 +36,13 @@ trained offline in Python with Keras and exported to weight files the browser re
 - **The deep energy-based model** (`data/checkpoints/ebm/`): the Chapter 7 energy network
   (four Conv2D swish layers into two dense layers ending in a single scalar), trained with
   contrastive divergence for 60 epochs on the 1,500 image MNIST subset. It powers the Langevin
-  sampling and Generate tabs so digits appear from noise instantly.
+  Langevin sampling step so digits appear from noise instantly.
 - **An ordinary classifier** (`data/checkpoints/clf/`): a small CNN trained with plain cross
-  entropy to about 98 percent accuracy, used only in the Classifier as EBM tab.
+  entropy to about 98 percent accuracy, used only in the Classifier as EBM step.
 
 The exact script that produced both is `build/train_checkpoints.py`.
 
-The **Training tab** does something different. When you click Train from scratch it builds a
+The **Training step** does something different. When you click Train from scratch it builds a
 brand new, randomly initialized copy of the same energy-model architecture and trains it live
 in your browser using TensorFlow.js, running the real contrastive divergence algorithm and the
 Langevin replay buffer from `assets/js/ebm-core.js`. When that run finishes, the app switches
@@ -48,7 +50,7 @@ to using your freshly trained model; reload the page to return to the pretrained
 The classifier is never affected by in-browser training.
 
 Both the Python pretraining script and the in-browser TensorFlow.js training code are shown in
-full inside the app, on the Code appendix tab.
+full inside the app, on the Extras tab.
 
 ## Run it locally
 

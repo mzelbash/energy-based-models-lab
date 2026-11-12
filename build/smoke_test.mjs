@@ -10,6 +10,8 @@ const CANDIDATES = [
   'C:/Program Files/Google/Chrome/Application/chrome.exe',
   'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe',
   'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',
+  '/usr/bin/google-chrome',
+  '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
 ];
 const CHROME = CANDIDATES.find((p) => fs.existsSync(p)) || CANDIDATES[0];
 const URL = 'http://localhost:8000/';
@@ -61,11 +63,13 @@ async function main() {
   await tab(1);
   await step('boltzCanvas', () => page.$eval('#boltz-canvas', (c) => c.width > 0 && c.height > 0));
 
+  // Tab 3 (index 2) holds both the data inspector (inside a collapsible section) and the
+  // live energy scorer.
   await tab(2);
+  await page.$$eval('#tab-network details', (els) => els.forEach((d) => (d.open = true)));
   await wait(800);
   await step('dataGridCells', () => page.$$eval('#data-grid canvas', (e) => e.length));
 
-  await tab(3);
   await page.waitForFunction(() => {
     const t = document.querySelector('#model-status .txt');
     return t && (t.textContent.includes('loaded') || t.textContent.includes('your trained'));
@@ -76,7 +80,7 @@ async function main() {
   await step('eReal', () => page.$eval('#e-real', (e) => e.textContent));
   await step('eNoise', () => page.$eval('#e-noise', (e) => e.textContent));
 
-  await tab(4);
+  await tab(3);
   await page.$eval('#lang-steps', (s) => (s.value = 60)).catch(() => {});
   await page.click('#lang-run').catch(() => {});
   await wait(8000);
@@ -84,7 +88,7 @@ async function main() {
   await step('langEnergy', () => page.$eval('#lang-energy', (e) => e.textContent));
   await step('langSnaps', () => page.$$eval('#lang-snaps .snap', (e) => e.length));
 
-  await tab(8);
+  await tab(5);
   await wait(500);
   await page.click('#jem-eval').catch(() => {});
   await wait(800);
