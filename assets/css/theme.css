@@ -659,3 +659,10 @@ details.codefold > summary:hover { background: var(--bg-2); }
 .lt-dot--good { fill: var(--good); } .lt-dot--bad { fill: var(--danger); } .lt-dot--mid { fill: var(--warn); }
 .lt-cap { font: 800 13px var(--font-sans); }
 .lt-cap--good { fill: var(--good); } .lt-cap--bad { fill: var(--danger); } .lt-cap--mid { fill: var(--warn); }
+/* Inline and diagram math */
+math.mi { font-size: 1.12em; font-weight: 500; color: var(--ink); padding: 0 2px; }
+.takeaway math.mi, .keyidea math.mi { font-weight: 600; }
+.v-math { color: var(--ink); font-size: 22px; display: flex; align-items: center; height: 100%; }
+.v-math math { margin: 0; font-weight: 500; }
+.v-math .mpurple, .v-math .mpurple * { color: var(--violet); }
+.flow__box--net math.mi, .flow__box--net math.mi * { color: #fff; }

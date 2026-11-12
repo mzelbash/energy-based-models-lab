@@ -59,10 +59,10 @@
         <div class="learn__text">
           <h2 class="sec-title">How it works</h2>
           <ul class="bullets">
-            <li>The model is <b>one network</b> that reads an input and returns <b>one number</b>, the energy <span class="kbd">E(x)</span>.</li>
+            <li>The model is <b>one network</b> that reads an input and returns <b>one number</b>, the energy <math class="mi"><mi>E</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></math>.</li>
             <li><b>Low energy</b>: looks like real data. <b>High energy</b>: does not, like random noise.</li>
             <li>It does not pick one answer. It <b>scores every answer</b>, and choosing is a separate step.</li>
-            <li>Two forms: <span class="kbd">E(x)</span> asks "is x plausible?", <span class="kbd">E(x, y)</span> asks "do x and y go together?"</li>
+            <li>Two forms: <math class="mi"><mi>E</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></math> asks "is x plausible?", <math class="mi"><mi>E</mi><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo stretchy="false">)</mo></math> asks "do x and y go together?"</li>
             <li>It is <b>not a new architecture</b>: any network that outputs one number can be an energy.</li>
           </ul>
         </div>
@@ -215,7 +215,7 @@
       <div class="flow">
         <div class="flow__box"><div class="flow__k">input x</div><div class="flow__v">an image</div></div>
         <div class="flow__arrow">&rarr;</div>
-        <div class="flow__box flow__box--net"><div class="flow__k">network</div><div class="flow__v">E<sub>&theta;</sub></div></div>
+        <div class="flow__box flow__box--net"><div class="flow__k">network</div><div class="flow__v"><math class="mi"><msub><mi>E</mi><mi>&#952;</mi></msub></math></div></div>
         <div class="flow__arrow">&rarr;</div>
         <div class="flow__box"><div class="flow__k">output</div><div class="flow__v">one number</div></div>
         <div class="flow__examples">
@@ -252,10 +252,10 @@
         <div class="learn__text">
           <h2 class="sec-title">How it works</h2>
           <ul class="bullets">
-            <li>The rule: <span class="kbd">p(x) = e<sup>&minus;E(x)</sup> / Z</span>.</li>
-            <li><b>e<sup>&minus;E</sup></b> turns energy into a weight: low energy, big weight, never negative.</li>
+            <li>The rule: <math class="mi" displaystyle="true"><mi>p</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mfrac><msup><mi>e</mi><mrow><mo>&#8722;</mo><mi>E</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></msup><mi>Z</mi></mfrac></math>.</li>
+            <li><math class="mi"><msup><mi>e</mi><mrow><mo>&#8722;</mo><mi>E</mi></mrow></msup></math> turns energy into a weight: low energy, big weight, never negative.</li>
             <li><b>Z</b> adds up every weight so the probabilities sum to 1.</li>
-            <li>For images, Z must add up <b>every possible image</b>: about 10<sup>1,888</sup> of them for 28 &times; 28. Impossible.</li>
+            <li>For images, Z must add up <b>every possible image</b>: about <math class="mi"><msup><mn>10</mn><mn>1,888</mn></msup></math> of them for 28 &times; 28. Impossible.</li>
             <li>The good news: training and sampling only need <b>differences</b> in energy, so Z cancels out.</li>
           </ul>
         </div>
@@ -279,7 +279,7 @@
             <text x="20" y="250" class="v-lab">low energy</text><text x="128" y="250" class="v-lab">&rarr;</text><text x="152" y="250" class="v-lab v-goodtxt">high probability</text>
             <text x="20" y="276" class="v-lab">differences get bigger: 0.5 vs 8 becomes 59% vs 0.03%</text>
           </svg>
-          <figcaption>Four images, four energies. <b>e<sup>&minus;E</sup> &divide; Z</b> turns them into probabilities.</figcaption>
+          <figcaption>Four images, four energies. <math class="mi"><msup><mi>e</mi><mrow><mo>&#8722;</mo><mi>E</mi></mrow></msup><mo>/</mo><mi>Z</mi></math> turns them into probabilities.</figcaption>
         </figure>
       </div>
 
@@ -307,7 +307,7 @@
         <div class="duo2__item"><div class="duo2__tag duo2__tag--bad">Problem</div><p>Z is impossible, so we cannot train by plain maximum likelihood.</p><div class="duo2__fix">Fix: <b>contrastive divergence</b> (step 5)</div></div>
       </div>
 
-      <div class="takeaway"><b>What you should know:</b> p(x) = e<sup>&minus;E(x)</sup> / Z. Low energy, high probability. We never compute Z.</div>
+      <div class="takeaway"><b>What you should know:</b> <math class="mi" displaystyle="true"><mi>p</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mfrac><msup><mi>e</mi><mrow><mo>&#8722;</mo><mi>E</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></msup><mi>Z</mi></mfrac></math>. Low energy, high probability. We never compute Z.</div>
       <details class="codefold"><summary>Show the book's code</summary><div class="codefold__body"><div data-listing="boltzmann"></div></div></details>
     </section>
 
@@ -407,8 +407,8 @@
         <div class="learn__text">
           <h2 class="sec-title">How it works</h2>
           <ul class="bullets">
-            <li>The update: <span class="kbd">x &larr; x &minus; &eta; &nabla;<sub>x</sub>E(x) + noise</span>.</li>
-            <li><span class="kbd">&nabla;<sub>x</sub>E</span> says how each pixel should change to <b>lower</b> the energy.</li>
+            <li>The update: <math class="mi"><mi>x</mi><mo>&#8592;</mo><mi>x</mi><mo>&#8722;</mo><mi>&#951;</mi><msub><mi mathvariant="normal">&#8711;</mi><mi>x</mi></msub><mi>E</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>+</mo><mtext>noise</mtext></math>.</li>
+            <li><math class="mi"><msub><mi mathvariant="normal">&#8711;</mi><mi>x</mi></msub><mi>E</mi></math> says how each pixel should change to <b>lower</b> the energy.</li>
             <li>The network weights are <b>frozen</b>. Only the image changes.</li>
             <li>The noise keeps samples from getting stuck, so you get different digits.</li>
             <li>Same network as step 3. Langevin is a <b>procedure</b> that uses it, not a second model.</li>
@@ -491,7 +491,7 @@
       </header>
 
       <div class="keyidea"><span class="keyidea__tag">Key idea</span>
-        <p><span class="kbd">loss = E(real) &minus; E(fake)</span>. The only way to make it smaller: real energy down, fake energy up.</p></div>
+        <p><math class="mi"><mtext>loss</mtext><mo>=</mo><mi>E</mi><mo stretchy="false">(</mo><mtext>real</mtext><mo stretchy="false">)</mo><mo>&#8722;</mo><mi>E</mi><mo stretchy="false">(</mo><mtext>fake</mtext><mo stretchy="false">)</mo></math>. The only way to make it smaller: real energy down, fake energy up.</p></div>
 
       <h2 class="sec-title">One training step, following a real 7</h2>
       <div class="steps6">
@@ -586,7 +586,7 @@
         <p>The energy of an image is <b>minus the log of the softmax denominator</b>. A normal classifier throws that number away.</p></div>
 
       <figure class="viz viz--wide">
-        <svg viewBox="0 0 920 300" role="img" aria-label="Ten logits read two ways: softmax for the label, minus log of the denominator for the energy">
+        <svg viewBox="0 0 920 304" role="img" aria-label="Ten logits read two ways: softmax for the label, minus log of the denominator for the energy">
           <text x="20" y="28" class="v-lab">10 logits from any classifier</text>
           <g>
             <rect x="20" y="140" width="22" height="12" class="v-midfill"/><rect x="48" y="146" width="22" height="6" class="v-midfill"/>
@@ -599,15 +599,15 @@
             <text x="212" y="44" class="v-num v-goodtxt">9.0</text>
           </g>
           <g class="v-arrow"><path d="M310,110 L370,70"/><path d="M310,120 L370,200"/></g>
-          <rect x="380" y="34" width="520" height="96" rx="12" class="v-card v-card--brand"/>
-          <text x="400" y="62" class="v-h v-brandtxt">Read 1: classifier ("which digit?")</text>
-          <text x="400" y="92" class="v-eq">p(y | x) = e^logit_y  &#247;  <tspan class="v-violettxt">&#931; e^logits</tspan></text>
-          <text x="400" y="118" class="v-lab">our 7: 8,103 &#247; 8,133 = 99.6%, answer 7</text>
-          <rect x="380" y="152" width="520" height="96" rx="12" class="v-card v-card--good"/>
-          <text x="400" y="180" class="v-h v-goodtxt">Read 2: energy ("is it a digit at all?")</text>
-          <text x="400" y="210" class="v-eq">E(x) = &#8722;log( <tspan class="v-violettxt">&#931; e^logits</tspan> )</text>
-          <text x="400" y="236" class="v-lab">our 7: &#8722;log 8,133 &#8776; &#8722;9 (low).  noise &#8776; &#8722;3 (high)</text>
-          <text x="380" y="282" class="v-lab"><tspan class="v-violettxt" font-weight="800">purple</tspan> = the softmax denominator. It sums over 10 labels, so it is cheap. It is not Z.</text>
+          <rect x="380" y="10" width="520" height="140" rx="12" class="v-card v-card--brand"/>
+          <text x="400" y="38" class="v-h v-brandtxt">Read 1: classifier ("which digit?")</text>
+          <foreignObject x="396" y="46" width="500" height="80"><div xmlns="http://www.w3.org/1999/xhtml" class="v-math"><math display="block"><mi>p</mi><mo stretchy="false">(</mo><mi>y</mi><mo>&#8739;</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mfrac><mrow><msup><mi>e</mi><msub><mtext>logit</mtext><mi>y</mi></msub></msup></mrow><mrow class="mpurple"><msub><mo>&#8721;</mo><mi>k</mi></msub><msup><mi>e</mi><msub><mtext>logit</mtext><mi>k</mi></msub></msup></mrow></mfrac></math></div></foreignObject>
+          <text x="400" y="138" class="v-lab">our 7: 8,103 &#247; 8,133 = 99.6%, answer 7</text>
+          <rect x="380" y="160" width="520" height="112" rx="12" class="v-card v-card--good"/>
+          <text x="400" y="186" class="v-h v-goodtxt">Read 2: energy ("is it a digit at all?")</text>
+          <foreignObject x="396" y="192" width="500" height="50"><div xmlns="http://www.w3.org/1999/xhtml" class="v-math"><math display="block"><mi>E</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mo>&#8722;</mo><mi>log</mi><mo>&#8289;</mo><mrow class="mpurple"><mo>(</mo><msub><mo>&#8721;</mo><mi>k</mi></msub><msup><mi>e</mi><msub><mtext>logit</mtext><mi>k</mi></msub></msup><mo>)</mo></mrow></math></div></foreignObject>
+          <text x="400" y="258" class="v-lab">our 7: &#8722;log 8,133 &#8776; &#8722;9 (low).  noise &#8776; &#8722;3 (high)</text>
+          <text x="380" y="294" class="v-lab"><tspan class="v-violettxt" font-weight="800">purple</tspan> = the softmax denominator. It sums over 10 labels, so it is cheap. It is not Z.</text>
         </svg>
       </figure>
 
@@ -615,7 +615,7 @@
         <div class="learn__text">
           <h2 class="sec-title">How it works</h2>
           <ul class="bullets">
-            <li>The energy of a pair is just <span class="kbd">E(x, y) = &minus;logit<sub>y</sub></span>. High logit, low energy.</li>
+            <li>The energy of a pair is just <math class="mi"><mi>E</mi><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo stretchy="false">)</mo><mo>=</mo><mo>&#8722;</mo><msub><mtext>logit</mtext><mi>y</mi></msub></math>. High logit, low energy.</li>
             <li>Softmax over those energies <b>is</b> the Boltzmann distribution over the 10 labels.</li>
             <li>At test time this is <b>just a normal classifier</b>, read as energies. Same answer, same cost.</li>
             <li>Softmax only sees which logit is biggest. The energy sees how big they are <b>overall</b>.</li>
@@ -670,7 +670,7 @@
             <li>One of the earliest EBMs (Hinton and colleagues, 1980s). The deep EBM is its modern relative.</li>
             <li><b>Visible units v</b>: the pixels. <b>Hidden units h</b>: learned pattern detectors (strokes, curves).</li>
             <li><b>Restricted</b>: links only between the two layers, never inside a layer.</li>
-            <li>Energy: <span class="kbd">E(v, h) = &minus;(v&#7488;Wh + a&#7488;v + b&#7488;h)</span>. Low energy, likely.</li>
+            <li>Energy: <math class="mi"><mi>E</mi><mo stretchy="false">(</mo><mi>v</mi><mo>,</mo><mi>h</mi><mo stretchy="false">)</mo><mo>=</mo><mo>&#8722;</mo><mo stretchy="false">(</mo><msup><mi>v</mi><mi>T</mi></msup><mi>W</mi><mi>h</mi><mo>+</mo><msup><mi>a</mi><mi>T</mi></msup><mi>v</mi><mo>+</mo><msup><mi>b</mi><mi>T</mi></msup><mi>h</mi><mo stretchy="false">)</mo></math>. Low energy, likely.</li>
             <li>Sampling: <b>Gibbs</b>, alternating v &rarr; h &rarr; v &rarr; h, one whole layer at a time.</li>
           </ul>
         </div>
