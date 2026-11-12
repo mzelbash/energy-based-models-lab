@@ -646,3 +646,16 @@ details.codefold > summary:hover { background: var(--bg-2); }
 .sec-title::after { display: none; }
 .chart-title { font-size: 0.95rem; margin: 0 0 8px; color: var(--ink-2); }
 .fineprint { max-width: none; }
+/* Step 1 energy landscape */
+.lt-curve { fill: none; stroke: var(--brand); stroke-width: 4; stroke-linecap: round; }
+.lt-axis { font: 800 14px var(--font-sans); fill: var(--ink-2); }
+.lt-note { font: 600 12px var(--font-sans); fill: var(--ink-3); }
+.lt-tick { font: 800 12px var(--font-sans); }
+.lt-tick--bad { fill: var(--danger); } .lt-tick--good { fill: var(--good); }
+.lt-bg { fill: #0b0f19; }
+.lt-ring { fill: none; stroke-width: 3; }
+.lt-ring--good { stroke: var(--good); } .lt-ring--bad { stroke: var(--danger); } .lt-ring--mid { stroke: var(--warn); }
+.lt-dot { stroke: var(--bg-elev); stroke-width: 3; }
+.lt-dot--good { fill: var(--good); } .lt-dot--bad { fill: var(--danger); } .lt-dot--mid { fill: var(--warn); }
+.lt-cap { font: 800 13px var(--font-sans); }
+.lt-cap--good { fill: var(--good); } .lt-cap--bad { fill: var(--danger); } .lt-cap--mid { fill: var(--warn); }
